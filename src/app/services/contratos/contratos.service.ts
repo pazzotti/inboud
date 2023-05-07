@@ -10,11 +10,13 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  callAPI(base: number, exponent: number): Observable<any> {
+
+
+  callAPI(ID:number, liner:string, tripcost:number, freetime:number, fsperiod:number, scperiod:number, tdperiod:number, comentario: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const body = JSON.stringify({ base: base, exponent: exponent });
+    const body = JSON.stringify({ ID:ID, liner:liner, tripcost:tripcost, freetime:freetime,fsperiod:fsperiod, scperiod:scperiod, tdperiod:tdperiod, comentario:comentario});
 
     return this.http.post<any>(this.apiUrl, body, { headers: headers });
   }

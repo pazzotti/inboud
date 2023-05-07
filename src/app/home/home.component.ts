@@ -12,6 +12,14 @@ import { ApiService } from '../services/contratos/contratos.service';
 export class HomeComponent{
   foods:Food[]=[];
   base: number = 3;
+  ID:number=Date.now();
+  liner:string = "";
+  tripcost:number = 0;
+  freetime:number=0;
+  fsperiod:number=0;
+  scperiod:number=0;
+  tdperiod:number=0;
+  comentario: string = "";
   exponent: number = 22;
   constructor(private foodService:FoodService, private apiService: ApiService){
 
@@ -22,8 +30,10 @@ export class HomeComponent{
 
   }
 
+
   callAPI() {
-    this.apiService.callAPI(this.base, this.exponent).subscribe(response => {
+    this.ID = Date.now()
+    this.apiService.callAPI(this.ID,this.liner, this.tripcost,this.freetime,this.fsperiod,this.scperiod,this.tdperiod, this.comentario).subscribe(response => {
       console.log(response.body);
       alert(response.body)
     }, error => {
