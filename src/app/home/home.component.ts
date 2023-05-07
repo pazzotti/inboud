@@ -3,6 +3,7 @@ import { FoodService } from '../services/food/food.service';
 import { Food } from '../shared/models/Food';
 import { ApiService } from '../services/contratos/contratos.service';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -10,8 +11,8 @@ import { ApiService } from '../services/contratos/contratos.service';
 })
 export class HomeComponent{
   foods:Food[]=[];
-  base: number = 10;
-  exponent: number = 5;
+  base: number = 3;
+  exponent: number = 22;
   constructor(private foodService:FoodService, private apiService: ApiService){
 
   }
@@ -21,8 +22,12 @@ export class HomeComponent{
 
   }
 
-  callApi(base: number, exponent: number): void {
-    this.apiService.callAPI(base, exponent);
+  callAPI() {
+    this.apiService.callAPI(this.base, this.exponent).subscribe(response => {
+      console.log(response.body);
+      alert(response.body)
+    }, error => {
+      console.log(error);
+    });
   }
-
 }

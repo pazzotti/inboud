@@ -1,5 +1,7 @@
 <ul>
-  <button (click)="callApi(base, exponent)">Chamar API</button>
+  <input type="number" name="base" [(ngModel)]="base">
+  <input type="number" name="exponent" [(ngModel)]="exponent">
+  <button (click)="callAPI()">Enviar</button>
   <li *ngFor="let food of foods">
     <a>
       <img src="{{food.imageUrl}}" alt="">
