@@ -4,6 +4,9 @@ import { Food } from '../shared/models/Food';
 import { ApiService } from '../services/contratos/contratos.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { LiveFormDialogComponent } from '../app/home/live-form-dialog/live-form-dialog.component';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { DynamoDBService } from '../services/contratos/consulta.service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +26,9 @@ export class HomeComponent{
   tdperiod:number=0;
   comentario: string = "";
   exponent: number = 22;
-  constructor(private foodService:FoodService, private apiService: ApiService, public dialog: MatDialog){
+  query: string = '';
+  items$ = this.dynamodbService.getItems(this.query);
+  constructor(private foodService:FoodService, private apiService: ApiService, public dialog: MatDialog,private dynamodbService: DynamoDBService){
 
   }
 
@@ -49,7 +54,16 @@ export class HomeComponent{
   ngOnInit():void{
     this.foods = this.foodService.getAll();
 
+    this.search();
   }
+
+
+  search() {
+    this.items$ = this.dynamodbService.getItems(this.query);
+  }
+
+
+
 
 
   callAPI() {

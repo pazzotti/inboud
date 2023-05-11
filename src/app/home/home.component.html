@@ -1,35 +1,17 @@
 <ul>
   <button mat-button (click)="openDialog()">Inserir item de Contrato</button>
-  <input type="number" name="ID" [(ngModel)]="ID">
-  <input type="string" name="liner" [(ngModel)]="liner">
-  <input type="number" name="tripcost" [(ngModel)]="tripcost">
-  <input type="number" name="freetime" [(ngModel)]="freetime">
-  <input type="number" name="fsperiod" [(ngModel)]="fsperiod">
-  <input type="number" name="scperiod" [(ngModel)]="scperiod">
-  <input type="number" name="tdperiod" [(ngModel)]="tdperiod">
-  <input type="string" name="comentario" [(ngModel)]="comentario">
-  <button (click)="callAPI()">Enviar</button>
-  <li *ngFor="let food of foods">
-    <a>
-      <img src="{{food.imageUrl}}" alt="">
-      <div class="content">
-        <div class="name">
-          {{food.name}}
-        </div>
-        <span class="favorite {{food.favorite?'':'not'}">
-          🧡
-        </span>
-        <div class="product-item-footer">
-          <div class="origins">
-            <span *ngFor="let origin of food.origins">
-              {{origin}}
 
-            </span>
-          </div>
-        </div>
 
-      </div>
-    </a>
+  <div *ngFor="let item of items$ | async">
+    <h2>{{ item.comentario }}</h2>
+    <p>First period: {{ item.fsperiod }}</p>
+    <p>Second period: {{ item.scperiod }}</p>
+    <p>Liner: {{ item.liner }}</p>
+    <p>Free time: {{ item.freetime }}</p>
+    <p>Trip cost: {{ item.tripcost }}</p>
+    <p>Latest greeting time: {{ item.LatestGreetingTime }}</p>
+    <p>ID: {{ item.ID }}</p>
+    <p>Third period: {{ item.tdperiod }}</p>
+  </div>
 
-  </li>
 </ul>
