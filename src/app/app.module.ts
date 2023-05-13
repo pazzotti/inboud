@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import { LiveFormDialogComponent } from './app/home/live-form-dialog/live-form-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AtualizarComponent } from './atualizar/atualizar.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppComponent,
     HeaderComponent,
     HomeComponent,
-    LiveFormDialogComponent
+    LiveFormDialogComponent,
+    AtualizarComponent
   ],
   imports: [
     BrowserModule,

@@ -7,13 +7,13 @@ import { PrimeNGModule } from './primeng.modules';
   imports: [
     CommonModule,
     FormsModule,
-    PrimeNGModule
+
   ],
   exports:[
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    PrimeNGModule
+
   ],
   declarations: []
 })

@@ -19,9 +19,9 @@
 
     </tr>
     <tr>
-      <td><input type="string" name="liner" [(ngModel)]="liner"></td>
-      <td><input type="number" name="tripcost" [(ngModel)]="tripcost"></td>
-      <td><input type="number" name="freetime" [(ngModel)]="freetime"></td>
+      <td><input type="string" name="liner" [(ngModel)]="data.liner"></td>
+      <td><input type="number" name="tripcost" [(ngModel)]="data.tripcost"></td>
+      <td><input type="number" name="freetime" [(ngModel)]="data.freetime"></td>
 
     </tr>
     <tr>
@@ -31,9 +31,9 @@
 
     </tr>
     <tr>
-      <td><input type="number" name="fsperiod" [(ngModel)]="fsperiod"></td>
-      <td><input type="number" name="scperiod" [(ngModel)]="scperiod"></td>
-      <td><input type="number" name="tdperiod" [(ngModel)]="tdperiod"></td>
+      <td><input type="number" name="fsperiod" [(ngModel)]="data.fsperiod"></td>
+      <td><input type="number" name="scperiod" [(ngModel)]="data.scperiod"></td>
+      <td><input type="number" name="tdperiod" [(ngModel)]="data.tdperiod"></td>
 
     </tr>
 
@@ -42,11 +42,11 @@
 
   <div>
     <label>Comentários</label>
-    <input type="string" name="comentario" [(ngModel)]="comentario">
+    <input type="string" name="comentario" [(ngModel)]="data.comentario">
   </div>
 
   <div>
-    <button class="btn btn-primary" type="button" (click)="callAPI()">Salvar</button>
+    <button class="btn btn-primary" type="button" (click)="salvar()">Salvar</button>
 
     <button class="btn btn-primary" type="button" (click)="cancel()">Cancelar</button>
 

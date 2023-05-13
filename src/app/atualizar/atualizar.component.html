@@ -1,0 +1,29 @@
+
+<div>
+  <button (click)="loadData()">Carregar arquivo</button>
+  <div *ngIf="dataLoaded">
+
+  <p>Total lines {{ jsonData.length }}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Processo</th>
+          <th>Container</th>
+          <th>Status</th>
+          <th>Transport</th>
+          <th>Canal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of jsonData">
+          <td>{{ item.Processo }}</td>
+          <td>{{ item.Container }}</td>
+          <td>{{ item.Status }}</td>
+          <td>{{ item.Transport }}</td>
+          <td>{{ item.Canal }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

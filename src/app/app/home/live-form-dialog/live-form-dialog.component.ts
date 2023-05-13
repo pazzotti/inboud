@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/contratos/contratos.service';
+import { ItemsService } from 'src/app/services/contratos/edita_dynamo.service';
+import { Item } from 'src/app/services/contratos/itens_contrato.model';
+
 
 @Component({
   selector: 'app-live-form-dialog',
@@ -19,18 +23,33 @@ export class LiveFormDialogComponent {
   tdperiod:number=0;
   comentario: string = "";
   exponent: number = 22;
+  updatedData: Item = {
+    ID: "",
+    comentario: '',
+    fsperiod: 0,
+    scperiod: 0,
+    tdperiod: 0,
+    liner: '',
+    freetime: 0,
+    tripcost: 0,
+    LatestGreetingTime: ''
+  };
 
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<LiveFormDialogComponent>,
+    private itemService: ItemsService,
+    @Inject(MAT_DIALOG_DATA) public data: any
 
   ) {}
 
-  callAPI() {
+  salvar() {
     this.ID = Date.now()
-    this.apiService.callAPI(this.ID,this.liner, this.tripcost,this.freetime,this.fsperiod,this.scperiod,this.tdperiod, this.comentario).subscribe(response => {
-      console.log(response.body);
-      alert(response.body)
+    if (this.data.ID == ""){
+      this.data.ID = this.ID;
+    }
+    this.apiService.salvar(this.data.ID,this.data.liner, this.data.tripcost,this.data.freetime,this.data.fsperiod,this.data.scperiod,this.data.tdperiod, this.data.comentario).subscribe(response => {
+
     }, error => {
       console.log(error);
     });
@@ -39,6 +58,17 @@ export class LiveFormDialogComponent {
 
   cancel(): void {
     this.dialogRef.close();
+  }
+
+  editItem(itemId: string) {
+
+    // Aqui você pode adicionar a lógica para abrir um modal ou preencher um formulário com os dados do item selecionado para edição
+    // Em seguida, você pode chamar o serviço para atualizar o item no DynamoDB
+    this.updatedData.ID = itemId;
+    this.itemService.updateItem(itemId, this.updatedData).subscribe(response => {
+      console.log(response);
+      // Aqui você pode adicionar a lógica para atualizar a lista de itens exibidos na tabela
+    });
   }
 }
 

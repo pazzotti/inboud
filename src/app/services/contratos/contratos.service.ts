@@ -12,7 +12,7 @@ export class ApiService {
 
 
 
-  callAPI(ID:number, liner:string, tripcost:number, freetime:number, fsperiod:number, scperiod:number, tdperiod:number, comentario: string): Observable<any> {
+  salvar(ID:number, liner:string, tripcost:number, freetime:number, fsperiod:number, scperiod:number, tdperiod:number, comentario: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });

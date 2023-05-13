@@ -1,17 +1,61 @@
-<ul>
-  <button mat-button (click)="openDialog()">Inserir item de Contrato</button>
+<body>
+  <ul>
+  <div>
 
-
-  <div *ngFor="let item of items$ | async">
-    <h2>{{ item.comentario }}</h2>
-    <p>First period: {{ item.fsperiod }}</p>
-    <p>Second period: {{ item.scperiod }}</p>
-    <p>Liner: {{ item.liner }}</p>
-    <p>Free time: {{ item.freetime }}</p>
-    <p>Trip cost: {{ item.tripcost }}</p>
-    <p>Latest greeting time: {{ item.LatestGreetingTime }}</p>
-    <p>ID: {{ item.ID }}</p>
-    <p>Third period: {{ item.tdperiod }}</p>
+    <button mat-button (click)="openDialog()"><span class="material-icons">
+      note_add
+      </span> Add new contract</button>,
   </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Liner</th>
+          <th>Trip cost</th>
+          <th>Free time</th>
+          <th>First period</th>
+          <th>Second period</th>
+          <th>Additional period</th>
+          <th>Notes</th>
+          <th>Action</th> <!-- adicionando uma coluna para os botões de ação -->
+        </tr>
+      </thead>
+      <tbody *ngFor="let item of items$ | async">
+        <tr [ngClass]="{ 'black-row': $even, 'grafiti-row': $odd }"> <!-- adicionando as classes de cor de fundo -->
+          <td>{{ item.liner }}</td>
+          <td>{{ item.tripcost }}</td>
+          <td>{{ item.freetime }}</td>
+          <td>{{ item.fsperiod }}</td>
+          <td>{{ item.scperiod }}</td>
+          <td>{{ item.tdperiod }}</td>
+          <td>{{ item.comentario }}</td>
+          <td> <!-- adicionando os botões de ação -->
+            <button mat-icon-button color="primary" aria-label="Editar" (click)="editDialog(item)">
+              <a>edit</a>
+            </button>
+            <span style="margin-left: 10px; margin-right: 10px;"> </span> <!-- espaço entre os botões -->
+            <button mat-icon-button color="warn" aria-label="Excluir" (click)="deleteItem(item.ID)">
+              <a>delete</a>
+            </button>
+          </td>
 
-</ul>
+        </tr>
+      </tbody>
+    </table>
+  </ul>
+</body>
+
+<style>
+  body {
+    background-color: black;
+  }
+
+  .black-row {
+    background-color: black;
+    color: white;
+  }
+
+  .grafiti-row {
+    background-color: #424242;
+    color: white;
+  }
+</style>

@@ -48,6 +48,10 @@ th {
   background-color: #393939;
   border-bottom: 2px solid #404040;
 }
+p {
+  background-color: #f7f0f0;
+  border-bottom: 2px solid #404040;
+}
 
 tr:nth-child(even) {
   background-color: #141414;
