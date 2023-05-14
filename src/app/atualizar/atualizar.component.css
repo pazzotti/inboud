@@ -25,6 +25,21 @@ button {
   border-radius: 5px;
 }
 
+input {
+  background-color: #292929;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
 /* Estilos para a tabela */
 table {
   border-collapse: separate;
@@ -92,3 +107,18 @@ div {
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
+
+  body {
+    background-color: black;
+  }
+
+  .black-row {
+    background-color: black;
+    color: white;
+  }
+
+  .grafiti-row {
+    background-color: #424242;
+    color: white;
+  }
+

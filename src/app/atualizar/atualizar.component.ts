@@ -13,10 +13,13 @@ export class AtualizarComponent {
 
   constructor(private carregaService: CarregaService) {}
 
-  async loadData() {
-    const fileUrl = '/assets/pipeline.txt';
+  async onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    const fileUrl = URL.createObjectURL(file);
+
     const data = await this.carregaService.loadFile(fileUrl);
     this.jsonData = data;
     this.dataLoaded = true;
   }
+
 }
