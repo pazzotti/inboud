@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Papa } from 'ngx-papaparse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarregaService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private papa: Papa) { }
 
   getFileContent(fileUrl: string): Promise<string> {
     return this.http.get(fileUrl, { responseType: 'text' })
@@ -15,20 +16,40 @@ export class CarregaService {
   }
 
   processData(fileContent: string): any[] {
-    const lines = fileContent.split('\n');
+    const parsedData = this.papa.parse(fileContent, { header: true }).data;
     const result = [];
     const seen = new Set();
-    for (const line of lines) {
-      const [arg17, arg18, arg19,,,,Processo,,,,Transport,,Canal,,,,Status,Container] = line.split('|');
-      if (line.trim().length === 0 || Container.trim().length === 0 || Container === " Container ") {
-        continue; // pula linhas vazias e com Container vazio
+    for (const row of parsedData) {
+      const {
+        'Process': Process,
+        'Container Id': Container,
+        ' Channel': Channel,
+        'Old Supplier Number': oldSupplierNumber,
+        'Step': Step,
+        'Transp. Type':Transport,
+        'Invoice Number': Invoice
+        // Continuar com os ajustes para as demais propriedades
+      } = row;
+
+      if (!Container || Container.trim().length === 0) {
+        continue; // pula linhas vazias e com Supplier Number vazio
       }
-      const key = `${Container},${arg18}`;
+
+      const key = `${Container},${Process}`;
       if (!seen.has(key)) {
         seen.add(key);
-        result.push({ Processo, Container, Status, Transport, Canal });
+        result.push({
+          Process,
+          Container,
+          Channel,
+          Step,
+          Transport,
+          Invoice
+          // Continuar com as demais propriedades que deseja extrair
+        });
       }
     }
+
     return result;
   }
 

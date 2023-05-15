@@ -1,31 +1,44 @@
 <body>
   <ul>
-<div>
-  <input type="file" (change)="onFileSelected($event)">
-  <div *ngIf="dataLoaded">
-
-  <p>Total lines {{ jsonData.length }}</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Processo</th>
-          <th>Container</th>
-          <th>Status</th>
-          <th>Transport</th>
-          <th>Canal</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of jsonData">
-          <td>{{ item.Processo }}</td>
-          <td>{{ item.Container }}</td>
-          <td>{{ item.Status }}</td>
-          <td>{{ item.Transport }}</td>
-          <td>{{ item.Canal }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-</ul>
+    <div>
+      <input type="file" (change)="onFileSelected($event)">
+      <div *ngIf="dataLoaded">
+        <p>Total lines {{ jsonData.length }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <button (click)="sortBy('Process')">Processo</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Container')">Container</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Step')">Status</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Transport')">Transport</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Channel')">Canal</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Invoice')">Invoice</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of jsonData">
+              <td>{{ item.Process }}</td>
+              <td>{{ item.Container }}</td>
+              <td>{{ item.Step }}</td>
+              <td>{{ item.Transport }}</td>
+              <td>{{ item.Channel }}</td>
+              <td>{{ item.Invoice }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ul>
 </body>
