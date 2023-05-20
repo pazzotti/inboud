@@ -1,20 +1,19 @@
 <body>
   <ul>
-  <div>
-
-    <button mat-button (click)="openDialog()"><span class="material-icons">
-      note_add
-      </span> Add new contract</button>,
-  </div>
+    <div>
+      <button mat-button (click)="openDialog()">
+        <span class="material-icons">note_add</span> Add new contract
+      </button>
+    </div>
     <table>
       <thead>
         <tr>
-          <th>Liner</th>
+          <th>Liner Name</th>
           <th>Trip cost</th>
           <th>Free time</th>
-          <th>First period</th>
-          <th>Second period</th>
-          <th>Additional period</th>
+          <th>Handling</th>
+          <th>Daily Cost</th>
+          <th>Term of Contract</th>
           <th>Notes</th>
           <th>Action</th> <!-- adicionando uma coluna para os botões de ação -->
         </tr>
@@ -22,10 +21,10 @@
       <tbody *ngFor="let item of items$ | async">
         <tr [ngClass]="{ 'black-row': $even, 'grafiti-row': $odd }"> <!-- adicionando as classes de cor de fundo -->
           <td>{{ item.liner }}</td>
-          <td>{{ item.tripcost }}</td>
+          <td> ${{ item.tripcost.toFixed(2) }}</td> <!-- adicionando o símbolo da moeda Real -->
           <td>{{ item.freetime }}</td>
-          <td>{{ item.fsperiod }}</td>
-          <td>{{ item.scperiod }}</td>
+          <td>${{ item.fsperiod.toFixed(2) }}</td>
+          <td>${{ item.scperiod.toFixed(2) }}</td>
           <td>{{ item.tdperiod }}</td>
           <td>{{ item.comentario }}</td>
           <td> <!-- adicionando os botões de ação -->
@@ -37,25 +36,10 @@
               <a>delete</a>
             </button>
           </td>
-
         </tr>
       </tbody>
     </table>
   </ul>
 </body>
 
-<style>
-  body {
-    background-color: black;
-  }
 
-  .black-row {
-    background-color: black;
-    color: white;
-  }
-
-  .grafiti-row {
-    background-color: #424242;
-    color: white;
-  }
-</style>

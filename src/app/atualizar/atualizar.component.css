@@ -121,4 +121,15 @@ div {
     background-color: #424242;
     color: white;
   }
-
+  .negative-value {
+    color: red;
+    font-weight: bold;
+  }
+  .danger-value {
+    color: rgb(241, 226, 3);
+    font-weight: bold;
+  }
+  .verde-value {
+    color: rgb(0, 255, 98);
+    font-weight: bold;
+  }

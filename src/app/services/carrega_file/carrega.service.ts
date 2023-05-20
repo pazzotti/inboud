@@ -27,11 +27,13 @@ export class CarregaService {
         'Old Supplier Number': oldSupplierNumber,
         'Step': Step,
         'Transp. Type':Transport,
-        'Invoice Number': Invoice
+        'Invoice Number': Invoice,
+        'Sline':Liner,
+        'ATA':ATA
         // Continuar com os ajustes para as demais propriedades
       } = row;
 
-      if (!Container || Container.trim().length === 0) {
+      if (!Container || Container.trim().length === 0 || Transport != 10 || ATA ==='') {
         continue; // pula linhas vazias e com Supplier Number vazio
       }
 
@@ -44,7 +46,9 @@ export class CarregaService {
           Channel,
           Step,
           Transport,
-          Invoice
+          Invoice,
+          Liner,
+          ATA
           // Continuar com as demais propriedades que deseja extrair
         });
       }
