@@ -1,7 +1,28 @@
 <nav>
   <a href="#">Karrara Comex</a>
   <div id="navbarNav">
-    <a href="#" >Contratos</a>
-    <a href="#" routerLink="/atualiza">Atualizar</a>
+    <a href="#" routerLink="/userScreen">Transport</a>
+    <a href="#" routerLink="/userScreen">FUP Operation</a>
+    <a mat-button [matMenuTriggerFor]="menu">Config</a>
+    <mat-menu #menu="matMenu" class="mat-menu-content">
+      <nav>
+        <a href="atualiza" routerLink="/atualiza">Update</a>
+      </nav>
+      <nav>
+        <a href="contratos" routerLink="/contratos">Contract</a>
+      </nav>
+
+
+
+    </mat-menu>
+
+
+
+
+
+
+
+
   </div>
+
 </nav>

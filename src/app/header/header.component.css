@@ -26,3 +26,19 @@ nav #navbarNav a {
 nav #navbarNav a:hover {
   background-color: #aa0d0d;
 }
+
+.mat-menu-content {
+  background-color: #292929;
+  color: white;
+}
+
+.mat-menu-content a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: white;
+}
+
+.mat-menu-content a:hover {
+  background-color: #aa0d0d;
+}

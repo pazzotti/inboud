@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { PrimeNGModule } from './primeng.modules';
+import { MatSelectModule } from '@angular/material/select';
+import { HeaderComponentes } from './header.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   imports: [
@@ -12,16 +14,14 @@ import { PrimeNGModule } from './primeng.modules';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    PrimeNGModule
+    MatMenuModule,
+    MatSelectModule
+  ],
+  declarations: [
+    HeaderComponentes
   ],
   exports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    PrimeNGModule
-  ],
-  declarations: []
+    HeaderComponentes
+  ]
 })
-export class ComumModule { }
+export class HeaderModule { }

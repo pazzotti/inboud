@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
+import { HeaderModule } from './header/header.module';
 import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -15,7 +15,6 @@ import { AtualizarComponent } from './atualizar/atualizar.component';
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
     HomeComponent,
     LiveFormDialogComponent,
     AtualizarComponent
@@ -23,6 +22,7 @@ import { AtualizarComponent } from './atualizar/atualizar.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HeaderModule,
     HttpClientModule,
     FormsModule,
     MatDialogModule,

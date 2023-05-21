@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import {Item} from '../contratos/itens_contrato.model'
 import { throwError } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,9 +15,20 @@ export class ItemsService {
   constructor(private http: HttpClient) { }
 
   // Método para obter todos os itens do DynamoDB
-  getItems(): Observable<Item[]> {
+
+
+
+
+  getItems2(): Observable<Item[]> {
     return this.http.get<Item[]>(this.apiUrl);
 
+  }
+
+  getItems(query: string): Observable<any[]> {
+    return this.http.get('https://bptdz1ciyi.execute-api.sa-east-1.amazonaws.com/Dev7').pipe(
+      map((response: any) => response.body),
+      catchError((error: any) => of([]))
+    );
   }
 
   // Método para obter um item específico pelo ID

@@ -3,12 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ContratosComponent } from './contratos/contratos.component';
 import { AtualizarComponent } from './atualizar/atualizar.component';
-import { HttpClientModule } from '@angular/common/http';
+import { TelaUserComponent } from './tela-user/tela-user.component';
 
 const routes: Routes = [
-  {path:'',component:HomeComponent},
-  {path:'contratos',component:ContratosComponent},
-  {path:'atualiza',component:AtualizarComponent}
+  {path:'contratos',component:HomeComponent},
+  {path:'',component:TelaUserComponent},
+  {path:'atualiza',component:AtualizarComponent},
+  {path:'userScreen',component:TelaUserComponent}
 
 ];
 

@@ -4,6 +4,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { format, parse, differenceInDays } from 'date-fns';
 import { DynamoDBService } from '../services/contratos/consulta.service';
 import { map, take } from 'rxjs/operators';
+import { formatDate } from '@angular/common';
 
 
 
@@ -27,11 +28,11 @@ export class AtualizarComponent {
   contratos: string[] = [];
   freetime: string[] = [];
   tripcost: string[] = [];
-  custoViagem: string="";
+  custoViagem: string = "";
   handling: string[] = [];
-  manuseio: string="";
+  manuseio: string = "";
   demurrage: string[] = [];
-  estadia: string="";
+  estadia: string = "";
   valorFree: string = '';
   liner: string = "";
   custoestadia: number = 0;
@@ -42,7 +43,8 @@ export class AtualizarComponent {
   constructor(
     private carregaService: CarregaService,
     private http: HttpClient,
-    private consultaContrato: DynamoDBService
+    private consultaContrato: DynamoDBService,
+
   ) { }
 
   async onFileSelected(event: any) {
@@ -103,11 +105,6 @@ export class AtualizarComponent {
   }
 
 
-
-  // ...
-
-
-
   inflateData(rawData: any[]): any[] {
 
     return rawData.map((item: any) => {
@@ -133,9 +130,9 @@ export class AtualizarComponent {
       this.Freetime = +this.valorFree - diffInDays; //calculo o numero de dias de freetime
 
       if (this.Freetime <= 0) {
-         this.custoestadia = +this.estadia * this.Freetime
+        this.custoestadia = +this.estadia * this.Freetime
       }
-      if (this.custoestadia<0){
+      if (this.custoestadia < 0) {
         this.custoestadia = this.custoestadia * (-1);
       }
 
@@ -182,13 +179,24 @@ export class AtualizarComponent {
 
         // Gerar um ID aleatório com base nos critérios do objeto
 
+        var ATA = item['ATA'].replace(/\//g, '');
+        const ID = item['Container'] + ATA
 
-        const ID = Math.floor(Math.random() * 1000); // Exemplo: ID aleatório entre 0 e 999
+        // Obtenha a data atual
+
+
+        const today = new Date();
+
+
+        const formattedDate = formatDate(today, 'dd/MM/yyyy', 'en-US');
+
+
+
 
 
         // Adicionar o ID gerado ao objeto
 
-        return { ID, ...item };
+        return { ID, formattedDate, ...item };
       });
 
       const batchSize = 10; // Tamanho máximo de cada lote
