@@ -129,8 +129,10 @@ export class AtualizarComponent {
       }
       this.Freetime = +this.valorFree - diffInDays; //calculo o numero de dias de freetime
 
-      if (this.Freetime <= 0) {
+      if (this.Freetime < 0) {
         this.custoestadia = +this.estadia * this.Freetime
+      }else{
+        this.custoestadia = 0;
       }
       if (this.custoestadia < 0) {
         this.custoestadia = this.custoestadia * (-1);

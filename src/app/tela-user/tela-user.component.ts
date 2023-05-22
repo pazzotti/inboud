@@ -3,6 +3,8 @@ import { ItemsService } from '../services/contratos/edita_dynamo.service';
 import { TelaUserModule } from './tela-user.module';
 import { CommonModule } from '@angular/common'
 import { isToday } from 'date-fns';
+import { debounceTime } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
 
 
 
@@ -14,17 +16,30 @@ import { isToday } from 'date-fns';
 export class TelaUserComponent implements OnInit {
   items: any[] = [];
   sortColumn: string = '';
+  sortNumber: number = 0;
   sortDirection: number = 1;
   dataLoaded = true;
   filtroDataInicio: Date = new Date();
   filtroDataTermino: Date = new Date();
   itemsFiltrados: any[] = [];
+  searchText: string='';
+  items2: any[] = [ /* Seus itens aqui */ ];
+  private searchTextSubject = new Subject<string>();
+  private searchTextSubscription!: Subscription;
+
 
   constructor(private dynamoDBService: ItemsService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.searchTextSubscription = this.searchTextSubject.pipe(debounceTime(300)).subscribe(() => {
+      this.filterItems();
+    });
     this.getItemsFromDynamoDB();
     this.calcularSomaDemurrage();
+  }
+
+  ngOnDestroy() {
+    this.searchTextSubscription.unsubscribe();
   }
 
   converterData(stringData: string): string {
@@ -103,9 +118,96 @@ export class TelaUserComponent implements OnInit {
       }
     });
   }
+  sortBy2(column: string) {
+    if (this.sortColumn === column) {
+      // Reverse the sort direction
+      this.sortDirection *= -1;
+    } else {
+      // Set the new sort column and reset the sort direction
+      this.sortColumn = column;
+      this.sortDirection = 1;
+    }
+
+    // Sort the data array based on the selected column and direction
+    this.itemsFiltrados.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
+      const valueA = parseFloat(a[this.sortColumn]);
+      const valueB = parseFloat(b[this.sortColumn]);
+
+      if (valueA < valueB) {
+        return -1 * this.sortDirection;
+      } else if (valueA > valueB) {
+        return 1 * this.sortDirection;
+      } else {
+        return 0;
+      }
+    });
+  }
+  sortByDate(column: string) {
+    if (this.sortColumn === column) {
+      // Inverte a direção da ordenação
+      this.sortDirection *= -1;
+    } else {
+      // Define a nova coluna de ordenação e redefine a direção da ordenação
+      this.sortColumn = column;
+      this.sortDirection = 1;
+    }
+
+    // Sort the data array based on the selected column and direction
+    this.itemsFiltrados.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
+      const dateA = this.parseDate(a[this.sortColumn]);
+      const dateB = this.parseDate(b[this.sortColumn]);
+
+      if (dateA < dateB) {
+        return -1 * this.sortDirection;
+      } else if (dateA > dateB) {
+        return 1 * this.sortDirection;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  parseDate(dateString: string): Date {
+    const parts = dateString.split('/');
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    return new Date(year, month, day);
+  }
 
 
+  filterItems() {
+    const searchText = this.searchText.toLowerCase();
+    this.itemsFiltrados = this.items.filter(item => {
 
+      // Implemente a lógica de filtragem com base no seu HTML
+      // Por exemplo, se seus itens tiverem uma propriedade 'Process':
+      return item.Process.toLowerCase().includes(searchText)
+        || item.Invoice.toLowerCase().includes(searchText)
+        || item.Container.toLowerCase().includes(searchText)
+        || item.Step.toLowerCase().includes(searchText)
+        || item.Liner.toLowerCase().includes(searchText)
+        || item.Channel.toLowerCase().includes(searchText)
+        || item.ATA.toLowerCase().includes(searchText)
+        || item.Dias.toLowerCase().includes(searchText)
+        || item.FreeTime.toLowerCase().includes(searchText)
+        || item.TripCost.toLowerCase().includes(searchText)
+        || item.Handling.toLowerCase().includes(searchText)
+        || item.Demurrage.toLowerCase().includes(searchText);
+    });
+  }
+
+  onSearchTextChanged() {
+    this.searchTextSubject.next(this.searchText);
+  }
 
 }
+
+
+
+
+
+
+
+
 

@@ -28,7 +28,7 @@ export class CarregaService {
         'Step': Step,
         'Transp. Type':Transport,
         'Invoice Number': Invoice,
-        'Sline':Liner,
+        'SLine':Liner,
         'ATA':ATA
         // Continuar com os ajustes para as demais propriedades
       } = row;

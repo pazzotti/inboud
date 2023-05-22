@@ -151,4 +151,6 @@ div {
   button {
     padding: 5px;
   }
-
+  .ultimo-input {
+    margin-left: 200px; /* Ajuste a margem conforme necessário */
+  }

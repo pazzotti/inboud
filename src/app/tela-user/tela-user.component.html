@@ -10,6 +10,7 @@
           <label for="filtroDataTermino">End date:</label>
           <input type="date" id="filtroDataTermino" name="filtroDataTermino" [(ngModel)]="filtroDataTermino">
           <button type="button" (click)="aplicarFiltroPorData()">Search</button>
+          <input type="text" name="searchText" [(ngModel)]="searchText" (input)="filterItems()" placeholder="Find" class="ultimo-input">
         </form>
 
         <table>
@@ -29,10 +30,10 @@
           <thead>
             <tr>
               <th>
-                <button (click)="sortBy('Process')">Processo</button>
+                <button (click)="sortBy('Process')">Process</button>
               </th>
               <th>
-                <button (click)="sortBy('Invoice')">Invoice</button>
+                <button (click)="sortBy2('Invoice')">Invoice</button>
               </th>
               <th>
                 <button (click)="sortBy('Container')">Container</button>
@@ -41,28 +42,28 @@
                 <button (click)="sortBy('Step')">Status</button>
               </th>
               <th>
-                <button (click)="sortBy('Transport')">Liner</button>
+                <button (click)="sortBy('Liner')">Liner</button>
               </th>
               <th>
-                <button (click)="sortBy('Channel')">Canal</button>
+                <button (click)="sortBy('Channel')">Channel</button>
               </th>
               <th>
-                <button (click)="sortBy('ATA')">ATA</button>
+                <button (click)="sortByDate('ATA')">ATA</button>
               </th>
               <th>
-                <button (click)="sortBy('Dias')">Harbor Days</button>
+                <button (click)="sortBy2('Dias')">Harbor Days</button>
               </th>
               <th>
-                <button (click)="sortBy('FreeTime')">Freetime</button>
+                <button (click)="sortBy2('FreeTime')">Freetime</button>
               </th>
               <th>
-                <button (click)="sortBy('TripCost')">Trip Cost</button>
+                <button (click)="sortBy2('TripCost')">Trip Cost</button>
               </th>
               <th>
-                <button (click)="sortBy('Handling')">Handling</button>
+                <button (click)="sortBy2('Handling')">Handling</button>
               </th>
               <th>
-                <button (click)="sortBy('Demurrage')">Demurrage</button>
+                <button (click)="sortBy2('Demurrage')">Demurrage</button>
               </th>
             </tr>
           </thead>
