@@ -2,7 +2,7 @@
 
 <div class="container">
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <div class="brand-title">Cadastrar novo contrato</div>
+  <div class="brand-title">Add / Change Contract</div>
 
 
 </nav>
@@ -14,7 +14,7 @@
   <table class="table table-dark">
     <tr>
       <td><label>Liner Name</label></td>
-      <td><label>Trip Cost (R$)</label></td>
+      <td><label>Freight Cost (US$)</label></td>
       <td><label>Free time (Days)</label></td>
 
     </tr>
@@ -41,14 +41,14 @@
   </table>
 
   <div>
-    <label>Comentários</label>
+    <label>Notes</label>
     <input type="string" name="comentario" [(ngModel)]="data.comentario">
   </div>
 
   <div>
-    <button class="btn btn-primary" type="button" (click)="salvar()">Salvar</button>
+    <button class="btn btn-primary" type="button" (click)="salvar()">Save</button>
 
-    <button class="btn btn-primary" type="button" (click)="cancel()">Cancelar</button>
+    <button class="btn btn-primary" type="button" (click)="cancel()">Cancel</button>
 
   </div>
 

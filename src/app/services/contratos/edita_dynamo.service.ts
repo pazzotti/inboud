@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {Item} from '../contratos/itens_contrato.model'
@@ -11,13 +11,19 @@ import { throwError } from 'rxjs';
 export class ItemsService {
 
   private apiUrl = 'https://68b0pyxkq6.execute-api.sa-east-1.amazonaws.com/dev3'; // substituir pela url da sua API
+  private apiUrlTransp = 'https://ke2r26nuf8.execute-api.sa-east-1.amazonaws.com/Dev7';
 
   constructor(private http: HttpClient) { }
 
   // Método para obter todos os itens do DynamoDB
 
 
+  getItemsByQuery(query: string): Observable<any[]> {
+    const url = `${this.apiUrlTransp}`;
+    const params = new HttpParams().set('query', query);
 
+    return this.http.get<any[]>(url, { params });
+  }
 
   getItems2(): Observable<Item[]> {
     return this.http.get<Item[]>(this.apiUrl);

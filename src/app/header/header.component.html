@@ -1,7 +1,7 @@
 <nav>
   <a href="#">Karrara Comex</a>
   <div id="navbarNav">
-    <a href="#" routerLink="/userScreen">Transport</a>
+    <a href="userScreenTransport" routerLink="/userScreenTransport">Transport</a>
     <a href="#" routerLink="/userScreen">FUP Operation</a>
     <a mat-button [matMenuTriggerFor]="menu">Config</a>
     <mat-menu #menu="matMenu" class="mat-menu-content">
@@ -9,9 +9,17 @@
         <a href="atualiza" routerLink="/atualiza">Update</a>
       </nav>
       <nav>
-        <a href="contratos" routerLink="/contratos">Contract</a>
+        <a href="contratos" routerLink="/contratos">Liners Contract</a>
       </nav>
-
+      <nav>
+        <a href="contratos" routerLink="/contratos">Harbor Contract</a>
+      </nav>
+      <nav>
+        <a href="contratos" routerLink="/contratos">EADI Contract</a>
+      </nav>
+      <nav>
+        <a href="contratos" routerLink="/contratos">Transport Contract</a>
+      </nav>
 
 
     </mat-menu>

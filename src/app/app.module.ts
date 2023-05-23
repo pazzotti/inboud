@@ -12,12 +12,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AtualizarComponent } from './atualizar/atualizar.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LiveFormDialogComponent,
-    AtualizarComponent
+    AtualizarComponent,
+
   ],
   imports: [
     BrowserModule,
