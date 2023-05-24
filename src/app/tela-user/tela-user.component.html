@@ -1,9 +1,7 @@
 <body>
   <ul>
     <div>
-
       <div *ngIf="dataLoaded">
-
         <form>
           <label for="filtroDataInicio">Start date:</label>
           <input type="date" id="filtroDataInicio" name="filtroDataInicio" [(ngModel)]="filtroDataInicio">
@@ -16,21 +14,26 @@
 
         <table>
           <tr>
-            <td colspan="12">Total Freight Cost: {{ calcularSomaTrip() | currency:'USD':'symbol':'1.2-2' }}</td>
-            <td colspan="12">Total Handling Cost: {{ calcularSomaHandling() | currency:'BRL':'symbol':'1.2-2' }}</td>
-            <td colspan="12">Total Demurrage Cost: {{ calcularSomaDemurrage() | currency:'USD':'symbol':'1.2-2' }}</td>
-            <td colspan="12">Total Period Cost: {{ calcularSomaDemurrage() + calcularSomaTrip() |
-              currency:'USD':'symbol':'1.2-2' }} + {{calcularSomaHandling()| currency:'BRL':'symbol':'1.2-2'}}</td>
-
+            <td colspan="12">Total Freight Cost: {{ SomaTrip | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td colspan="12">Total Handling Cost: {{ SomaHandling | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td colspan="12">Total Demurrage Cost: {{ somaDemurrage | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td colspan="12">Total Period Cost: {{ somaDemurrage + SomaTrip |
+              currency:'USD':'symbol':'1.2-2' }} + {{SomaHandling| currency:'BRL':'symbol':'1.2-2'}}</td>
           </tr>
         </table>
 
-
         <p>Total lines {{ itemsFiltrados.length }}</p>
-        <table>
 
+        <div (click)="toggleColumn()" class="show-hide-icon">+</div>
+
+        <table>
           <thead>
             <tr>
+              <th [class.hide-column]="hideCheckColumn">
+                <button type="button" (click)="selecionarTodos()">
+                  {{ todosSelecionados ? 'Deselect All' : 'Select All' }}
+                </button>
+              </th>
               <th>
                 <button (click)="sortBy('Process')">Process</button>
               </th>
@@ -71,17 +74,21 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of itemsFiltrados">
+              <td [class.hide-column]="hideCheckColumn">
+                <input type="checkbox" [(ngModel)]="item.checked" (change)="calcularSomaDemurrage()"
+                  [checked]="item.checked">
+              </td>
               <td>{{ item.Process }}</td>
               <td>{{ item.Invoice }}</td>
               <td>{{ item.Container }}</td>
               <td>{{ item.Step }}</td>
               <td>{{ item.Liner }}</td>
-              <td [ngClass]="{ 'verde-value': item.Channel == 'VERDE','negative-value': item.Channel == 'VERMELHO'}">{{
-                item.Channel }}</td>
+              <td [ngClass]="{ 'verde-value': item.Channel == 'VERDE', 'negative-value': item.Channel == 'VERMELHO' }">
+                {{ item.Channel }}</td>
               <td>{{ item.ATA }}</td>
               <td>{{ item.Dias }}</td>
               <td
-                [ngClass]="{ 'negative-value': item.FreeTime < 0 , 'danger-value': item.FreeTime < 2 && item.FreeTime >= 0 }">
+                [ngClass]="{ 'negative-value': item.FreeTime < 0, 'danger-value': item.FreeTime < 2 && item.FreeTime >= 0 }">
                 {{ item.FreeTime }}</td>
               <td>{{ item.TripCost | currency:'USD':'symbol':'1.2-2' }}</td>
               <td>{{ item.Handling | currency:'BRL':'symbol':'1.2-2' }}</td>

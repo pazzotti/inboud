@@ -182,7 +182,7 @@ export class AtualizarComponent {
         // Gerar um ID aleatório com base nos critérios do objeto
 
         var ATA = item['ATA'].replace(/\//g, '');
-        const ID = item['Container'] + ATA
+        const ID = item['Invoice']
 
         // Obtenha a data atual
 

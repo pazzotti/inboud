@@ -33,7 +33,7 @@ export class CarregaService {
         // Continuar com os ajustes para as demais propriedades
       } = row;
 
-      if (!Container || Container.trim().length === 0 || Transport != 10 || ATA ==='') {
+      if (!Container || Container.trim().length === 0 || Transport != 10 || ATA === '') {
         continue; // pula linhas vazias e com Supplier Number vazio
       }
 

@@ -154,3 +154,13 @@ div {
   .ultimo-input {
     margin-left: 200px; /* Ajuste a margem conforme necessário */
   }
+  .hide-column {
+    display: none;
+  }
+
+  .show-hide-icon {
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+  }
+

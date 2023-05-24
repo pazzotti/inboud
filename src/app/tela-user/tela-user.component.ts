@@ -21,20 +21,35 @@ export class TelaUserComponent implements OnInit {
   dataLoaded = true;
   filtroDataInicio: Date = new Date();
   filtroDataTermino: Date = new Date();
-  itemsFiltrados: any[] = [];
   searchText: string='';
   items2: any[] = [ /* Seus itens aqui */ ];
   private searchTextSubject = new Subject<string>();
   private searchTextSubscription!: Subscription;
+  somaDemurrage: number=0;
+  SomaTrip:number=0;
+  SomaHandling:number=0;
+  hideCheckColumn: boolean = true;
+  itemsFiltrados: any[] = [];
+  todosSelecionados: boolean = false;
 
 
   constructor(private dynamoDBService: ItemsService) { }
 
   ngOnInit() {
+
     this.searchTextSubscription = this.searchTextSubject.pipe(debounceTime(300)).subscribe(() => {
       this.filterItems();
     });
     this.getItemsFromDynamoDB();
+    this.calcularSomaDemurrage();
+
+  }
+
+  selecionarTodos() {
+    this.todosSelecionados = !this.todosSelecionados;
+    for (let item of this.itemsFiltrados) {
+      item.checked = this.todosSelecionados;
+    }
     this.calcularSomaDemurrage();
   }
 
@@ -51,6 +66,27 @@ export class TelaUserComponent implements OnInit {
     return `${ano}-${mes}-${dia}`;
   }
 
+toggleColumn() {
+  this.hideCheckColumn = !this.hideCheckColumn;
+}
+
+
+  calcularSomaDemurrage() {
+    this.somaDemurrage = 0;
+    this.SomaTrip = 0;
+    this.SomaHandling = 0;
+
+    for (let item of this.itemsFiltrados) {
+      if (item.checked) {
+        this.somaDemurrage += Number(item.Demurrage);
+        this.SomaTrip += Number(item.TripCost);
+        this.SomaHandling += Number(item.Handling);
+      }
+    }
+  }
+
+
+
   aplicarFiltroPorData(): void {
     if (this.filtroDataInicio && this.filtroDataTermino) {
       const filtroInicio = new Date(this.filtroDataInicio);
@@ -62,25 +98,12 @@ export class TelaUserComponent implements OnInit {
 
         return dataItem >= filtroInicio && dataItem <= filtroTermino;
       });
+
     } else {
       this.itemsFiltrados = this.items;
+
     }
   }
-
-
-
-  calcularSomaTrip(): number {
-    return this.itemsFiltrados.reduce((sum, item) => sum + Number(item.TripCost), 0);
-  }
-  calcularSomaHandling(): number {
-    return this.itemsFiltrados.reduce((sum, item) => sum + Number(item.Handling), 0);
-  }
-  calcularSomaDemurrage(): number {
-    return this.itemsFiltrados.reduce((sum, item) => sum + Number(item.Demurrage), 0);
-  }
-
-
-
 
   getItemsFromDynamoDB(): void {
     const query = 'SELECT * FROM ID';
