@@ -2,9 +2,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/contratos/contratos.service';
-import { ItemsService } from 'src/app/services/contratos/edita_dynamo.service';
-import { Item } from 'src/app/services/contratos/itens_contrato.model';
-
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-live-form-dialog',
@@ -14,61 +12,73 @@ import { Item } from 'src/app/services/contratos/itens_contrato.model';
 export class LiveFormDialogComponent {
 
   base: number = 3;
-  ID:number=Date.now();
-  liner:string = "";
-  tripcost:number = 0;
-  freetime:number=0;
-  fsperiod:number=0;
-  scperiod:number=0;
-  tdperiod:number=0;
+  ID: number = Date.now();
+  liner: string = "";
+  tripcost: number = 0;
+  freetime: number = 0;
+  fsperiod: number = 0;
+  scperiod: number = 0;
+  tdperiod: number = 0;
   comentario: string = "";
   exponent: number = 22;
-  updatedData: Item = {
-    ID: "",
-    comentario: '',
-    fsperiod: 0,
-    scperiod: 0,
-    tdperiod: 0,
-    liner: '',
-    freetime: 0,
-    tripcost: 0,
-    LatestGreetingTime: ''
-  };
+  dataSource: any;
+  urlAtualiza: string = 'https://uj88w4ga9i.execute-api.sa-east-1.amazonaws.com/dev12';
+  query: string = 'PowerMathDatabase2';
+
 
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<LiveFormDialogComponent>,
-    private itemService: ItemsService,
     @Inject(MAT_DIALOG_DATA) public data: any
 
-  ) {}
+  ) { }
 
   salvar() {
-    this.ID = Date.now()
-    if (this.data.ID == ""){
-      this.data.ID = this.ID;
+
+    if (!this.data.itemsData.hasOwnProperty("ID")) {
+      const currentDate = new Date();
+      const formattedDate = format(currentDate, 'ddMMyyyyHHmmss');
+      console.log(formattedDate);
+
+      this.data.itemsData = {"ID" : formattedDate.toString(),"comentario":this.data.itemsData.comentario,"freetime":this.data.itemsData.freetime,"fsperiod":this.data.itemsData.fsperiod,"liner":this.data.itemsData.liner, "scperiod":this.data.itemsData.scperiod,"tdperiod":this.data.itemsData.tdperiod,"tripcost":this.data.itemsData.tripcost }
+
+
     }
-    this.apiService.salvar(this.data.ID,this.data.liner, this.data.tripcost,this.data.freetime,this.data.fsperiod,this.data.scperiod,this.data.tdperiod, this.data.comentario).subscribe(response => {
+
+    this.data.itemsData.tableName = this.query
+
+
+    // Remover as barras invertidas escapadas
+    const itemsDataString = JSON.stringify(this.data.itemsData); // Acessa a string desejada
+    const modifiedString = itemsDataString.replace(/\\"/g, '"'); // Realiza a substituição na string
+
+
+    // Converter a string JSON para um objeto JavaScript
+    const jsonObject = JSON.parse(modifiedString) as { [key: string]: string };
+
+    // Converter o objeto JavaScript de volta para uma string JSON
+    const modifiedJsonString = JSON.stringify(jsonObject);
+
+    console.log(modifiedJsonString);
+
+    // Converter a string JSON para um objeto JavaScript
+    const jsonObject2 = JSON.parse(modifiedJsonString) as { tableName: string, ID: string, acao: string };
+
+    // Criar um array contendo o objeto
+    const jsonArray = [jsonObject2];
+
+    this.apiService.salvar(jsonArray, this.query, this.urlAtualiza).subscribe(response => {
 
     }, error => {
       console.log(error);
     });
-    this.dialogRef.close();
+    this.dialogRef.close('resultado do diálogo');
   }
 
   cancel(): void {
     this.dialogRef.close();
   }
 
-  editItem(itemId: string) {
 
-    // Aqui você pode adicionar a lógica para abrir um modal ou preencher um formulário com os dados do item selecionado para edição
-    // Em seguida, você pode chamar o serviço para atualizar o item no DynamoDB
-    this.updatedData.ID = itemId;
-    this.itemService.updateItem(itemId, this.updatedData).subscribe(response => {
-      console.log(response);
-      // Aqui você pode adicionar a lógica para atualizar a lista de itens exibidos na tabela
-    });
-  }
 }
 

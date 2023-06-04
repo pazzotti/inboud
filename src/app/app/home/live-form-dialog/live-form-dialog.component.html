@@ -19,9 +19,9 @@
 
     </tr>
     <tr>
-      <td><input type="string" name="liner" [(ngModel)]="data.liner"></td>
-      <td><input type="number" name="tripcost" [(ngModel)]="data.tripcost"></td>
-      <td><input type="number" name="freetime" [(ngModel)]="data.freetime"></td>
+      <td><input type="string" name="liner" [(ngModel)]="data.itemsData.liner"></td>
+      <td><input type="number" name="tripcost" [(ngModel)]="data.itemsData.tripcost"></td>
+      <td><input type="number" name="freetime" [(ngModel)]="data.itemsData.freetime"></td>
 
     </tr>
     <tr>
@@ -31,9 +31,9 @@
 
     </tr>
     <tr>
-      <td><input type="number" name="fsperiod" [(ngModel)]="data.fsperiod"></td>
-      <td><input type="number" name="scperiod" [(ngModel)]="data.scperiod"></td>
-      <td><input type="date" name="tdperiod" [(ngModel)]="data.tdperiod"></td>
+      <td><input type="number" name="fsperiod" [(ngModel)]="data.itemsData.fsperiod"></td>
+      <td><input type="number" name="scperiod" [(ngModel)]="data.itemsData.scperiod"></td>
+      <td><input type="date" name="tdperiod" [(ngModel)]="data.itemsData.tdperiod"></td>
 
     </tr>
 
@@ -42,7 +42,7 @@
 
   <div>
     <label>Notes</label>
-    <input type="string" name="comentario" [(ngModel)]="data.comentario">
+    <input type="string" name="comentario" [(ngModel)]="data.itemsData.comentario">
   </div>
 
   <div>

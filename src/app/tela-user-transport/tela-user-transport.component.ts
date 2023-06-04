@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemsService } from '../services/contratos/edita_dynamo.service';
-import { TelaUserModuleTransport } from './tela-user-transport.module';
-import { CommonModule } from '@angular/common'
 import { isToday } from 'date-fns';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
+import { ApiService } from '../services/contratos/contratos.service';
+import { AppModule } from '../app.module';
 
 
 
@@ -26,10 +25,11 @@ export class TelaUserComponentTransport implements OnInit {
   items2: any[] = [ /* Seus itens aqui */ ];
   private searchTextSubject = new Subject<string>();
   private searchTextSubscription!: Subscription;
+  urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
+  query: string = 'Pipeline_Inbound';
 
 
-
-  constructor(private dynamoDBService: ItemsService) { }
+  constructor(private dynamoDBService: ApiService) { }
 
   ngOnInit() {
     this.searchTextSubscription = this.searchTextSubject.pipe(debounceTime(300)).subscribe(() => {
@@ -68,8 +68,6 @@ export class TelaUserComponentTransport implements OnInit {
     }
   }
 
-
-
   calcularSomaTrip(): number {
     return this.itemsFiltrados.reduce((sum, item) => sum + Number(item.TripCost), 0);
   }
@@ -93,21 +91,32 @@ export class TelaUserComponentTransport implements OnInit {
     console.log("Reutilizar:", item);
   }
 
-
-
-
-
   getItemsFromDynamoDB(): void {
-    const query = 'Scheduled';
-    this.dynamoDBService.getItemsByQuery(query).subscribe(
-      (items: any[]) => {
-        this.items = items;
+    const filtro = 'Scheduled';
+    this.dynamoDBService.getItems(this.query, this.urlConsulta, filtro).subscribe(
+      (response: any) => {
+        if (response.statusCode === 200) {
+          try {
+            const items = JSON.parse(response.body);
+            if (Array.isArray(items)) {
+              this.items = items.map(item => ({ ...item, checked: false }));
+              // Adiciona a chave 'checked' a cada item, com valor inicial como false
+            } else {
+              console.error('Invalid items data:', items);
+            }
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+          }
+        } else {
+          console.error('Invalid response:', response);
+        }
       },
       (error: any) => {
         console.error(error);
       }
     );
   }
+
 
 
   sortBy(column: string) {

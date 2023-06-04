@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemsService } from '../services/contratos/edita_dynamo.service';
+import { ApiService } from '../services/contratos/contratos.service';
 import { TelaUserModule } from './tela-user.module';
 import { CommonModule } from '@angular/common'
 import { isToday } from 'date-fns';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
+import { AppModule } from '../app.module';
 
 
 
@@ -21,19 +22,22 @@ export class TelaUserComponent implements OnInit {
   dataLoaded = true;
   filtroDataInicio: Date = new Date();
   filtroDataTermino: Date = new Date();
-  searchText: string='';
-  items2: any[] = [ /* Seus itens aqui */ ];
+  searchText: string = '';
+  items2: any[] = [ /* Seus itens aqui */];
   private searchTextSubject = new Subject<string>();
   private searchTextSubscription!: Subscription;
-  somaDemurrage: number=0;
-  SomaTrip:number=0;
-  SomaHandling:number=0;
+  somaDemurrage: number = 0;
+  SomaTrip: number = 0;
+  SomaHandling: number = 0;
   hideCheckColumn: boolean = true;
   itemsFiltrados: any[] = [];
   todosSelecionados: boolean = false;
+  urlAtualiza: string = 'https://uj88w4ga9i.execute-api.sa-east-1.amazonaws.com/dev12';
+  urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
+  query: string = 'Pipeline_Inbound';
 
 
-  constructor(private dynamoDBService: ItemsService) { }
+  constructor(private dynamoDBService: ApiService) { }
 
   ngOnInit() {
 
@@ -41,7 +45,6 @@ export class TelaUserComponent implements OnInit {
       this.filterItems();
     });
     this.getItemsFromDynamoDB();
-    this.calcularSomaDemurrage();
 
   }
 
@@ -50,7 +53,12 @@ export class TelaUserComponent implements OnInit {
     for (let item of this.itemsFiltrados) {
       item.checked = this.todosSelecionados;
     }
-    this.calcularSomaDemurrage();
+
+  }
+
+  selecionarItem(item: any): void {
+    // Define o estado de checked apenas para o item selecionado
+    item.checked = true;
   }
 
   ngOnDestroy() {
@@ -66,26 +74,36 @@ export class TelaUserComponent implements OnInit {
     return `${ano}-${mes}-${dia}`;
   }
 
-toggleColumn() {
-  this.hideCheckColumn = !this.hideCheckColumn;
-}
+  toggleColumn() {
+    this.hideCheckColumn = !this.hideCheckColumn;
+  }
 
 
-  calcularSomaDemurrage() {
+
+  calculateTotalDemurrage(): number {
+    let totalDemurrage = 0;
     this.somaDemurrage = 0;
-    this.SomaTrip = 0;
     this.SomaHandling = 0;
+    this.SomaTrip = 0;
 
-    for (let item of this.itemsFiltrados) {
+    for (const item of this.items) {
       if (item.checked) {
         this.somaDemurrage += Number(item.Demurrage);
         this.SomaTrip += Number(item.TripCost);
         this.SomaHandling += Number(item.Handling);
       }
     }
+
+    return totalDemurrage;
   }
 
+  toggleCheckedStatus(index: number, item: any): void {
+    item.checked = true;
+  }
 
+  isItemChecked(index: number): boolean {
+    return this.items[index].checked;
+  }
 
   aplicarFiltroPorData(): void {
     if (this.filtroDataInicio && this.filtroDataTermino) {
@@ -106,10 +124,24 @@ toggleColumn() {
   }
 
   getItemsFromDynamoDB(): void {
-    const query = 'SELECT * FROM ID';
-    this.dynamoDBService.getItems(query).subscribe(
-      (items: any[]) => {
-        this.items = items;
+    const filtro = 'all';
+    this.dynamoDBService.getItems(this.query, this.urlConsulta, filtro).subscribe(
+      (response: any) => {
+        if (response.statusCode === 200) {
+          try {
+            const items = JSON.parse(response.body);
+            if (Array.isArray(items)) {
+              this.items = items.map(item => ({ ...item, checked: false }));
+              // Adiciona a chave 'checked' a cada item, com valor inicial como false
+            } else {
+              console.error('Invalid items data:', items);
+            }
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+          }
+        } else {
+          console.error('Invalid response:', response);
+        }
       },
       (error: any) => {
         console.error(error);
@@ -201,6 +233,7 @@ toggleColumn() {
 
   filterItems() {
     const searchText = this.searchText.toLowerCase();
+    this.calculateTotalDemurrage()
     this.itemsFiltrados = this.items.filter(item => {
 
       // Implemente a lógica de filtragem com base no seu HTML
@@ -212,11 +245,6 @@ toggleColumn() {
         || item.Liner.toLowerCase().includes(searchText)
         || item.Channel.toLowerCase().includes(searchText)
         || item.ATA.toLowerCase().includes(searchText)
-        || item.Dias.toLowerCase().includes(searchText)
-        || item.FreeTime.toLowerCase().includes(searchText)
-        || item.TripCost.toLowerCase().includes(searchText)
-        || item.Handling.toLowerCase().includes(searchText)
-        || item.Demurrage.toLowerCase().includes(searchText);
     });
   }
 

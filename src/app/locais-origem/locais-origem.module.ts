@@ -3,19 +3,21 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';  // <<<< import it here
-import { TelaUserComponent } from './tela-user.component';
+
+
+
+
 
 
 
 @NgModule({
-  declarations: [TelaUserComponent],
-  imports: [CommonModule,MatIconModule,BrowserModule, FormsModule,
+  declarations: [],
+  imports: [CommonModule,MatIconModule,BrowserModule, FormsModule
   ],
   providers: [],
   bootstrap: []
 })
-export class TelaUserModule { }
-
+export class Locais_OrigemModule { }
 
 
 

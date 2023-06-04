@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FoodService } from '../services/food/food.service';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Food } from '../shared/models/Food';
 import { ApiService } from '../services/contratos/contratos.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LiveFormDialogComponent } from '../app/home/live-form-dialog/live-form-dialog.component';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { DynamoDBService } from '../services/contratos/consulta.service';
-import { HomeModule } from './home.module';
-import { ItemsService } from '../services/contratos/edita_dynamo.service';
-import { Item } from '../services/contratos/itens_contrato.model';
+import { Observable, map, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { format } from 'date-fns';
+
 
 @Component({
   selector: 'app-home',
@@ -18,7 +15,10 @@ import { Item } from '../services/contratos/itens_contrato.model';
 })
 
 export class HomeComponent {
-  items: Item[] = [];
+  urlAtualiza: string = 'https://uj88w4ga9i.execute-api.sa-east-1.amazonaws.com/dev12';
+  urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
+  query: string = 'PowerMathDatabase2';
+  data: any;
   foods: Food[] = [];
   base: number = 3;
   ID: number = Date.now();
@@ -30,47 +30,48 @@ export class HomeComponent {
   tdperiod: number = 0;
   comentario: string = "";
   exponent: number = 22;
-  query: string = '';
-  items$ = this.dynamodbService.getItems(this.query);
   $even: any;
   $odd: any;
-  updatedData: Item = {
-    ID: "",
-    comentario: '',
-    fsperiod: 0,
-    scperiod: 0,
-    tdperiod: 0,
-    liner: '',
-    freetime: 0,
-    tripcost: 0,
-    LatestGreetingTime: ''
-  };
-  constructor(private foodService: FoodService, private apiService: ApiService, public dialog: MatDialog, private dynamodbService: DynamoDBService, private itemService: ItemsService) {
+  dataSource: any;
+  dialogRef: any;
+  items$!: Observable<any[]>;
+  items: any[] = [];
+  constructor(public dialog: MatDialog, private dynamodbService: ApiService, private http: HttpClient, private cdr: ChangeDetectorRef) {
 
   }
 
-  editDialog(item: Item): void {
+  editDialog(item: Array<any>, url: string, table: string): void {
     const dialogRef = this.dialog.open(LiveFormDialogComponent, {
-      data: item,
+      data: {
+        itemsData: item,
+        url: url,
+        query: table
+      },
       height: '550px',
       minWidth: '850px',
       position: {
         top: '10vh',
         left: '30vw'
       },
-
-
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        setTimeout(() => {
+          this.getItemsFromDynamoDB();
+        }, 200); // Ajuste o tempo de atraso conforme necessário
+      }
       console.log('The dialog was closed');
-
     });
   }
 
-  openDialog(): void {
+  openDialog(item: Array<any>, url: string, table: string): void {
     const dialogRef = this.dialog.open(LiveFormDialogComponent, {
-      data: this.updatedData,
+      data: {
+        itemsData: [],
+        url: url,
+        query: table
+      },
       height: '550px',
       minWidth: '850px',
       position: {
@@ -82,47 +83,60 @@ export class HomeComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        setTimeout(() => {
+          this.getItemsFromDynamoDB();
+        }, 200); // Ajuste o tempo de atraso conforme necessário
+      }
       console.log('The dialog was closed');
 
     });
   }
 
   ngOnInit(): void {
-    this.foods = this.foodService.getAll();
-
-    this.search();
+    this.getItemsFromDynamoDB();
   }
 
-
-  search() {
-    this.items$ = this.dynamodbService.getItems(this.query);
+  getItemsFromDynamoDB(): void {
+    const filtro = 'all';
+    this.dynamodbService.getItems(this.query, this.urlConsulta, filtro).subscribe(
+      (response: any) => {
+        if (response.statusCode === 200) {
+          try {
+            const items = JSON.parse(response.body);
+            if (Array.isArray(items)) {
+              this.items = items.map(item => ({ ...item, checked: false }));
+              // Adiciona a chave 'checked' a cada item, com valor inicial como false
+              // Forçar detecção de alterações após atualizar os dados
+              this.cdr.detectChanges();
+            } else {
+              console.error('Invalid items data:', items);
+            }
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+          }
+        } else {
+          console.error('Invalid response:', response);
+        }
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
   }
 
+  deleteItem(ID: string, urlDeleta: string, query: string): void {
+    this.dynamodbService.deleteItem(ID, this.urlAtualiza, this.query).subscribe(
+      response => {
+        setTimeout(() => {
+          this.getItemsFromDynamoDB();
+        }, 200); // Ajuste o tempo de atraso conforme necessário
+      },
+      error => {
+        // Lógica para lidar com erros durante a deleção do item
+      }
+    );
 
-
-  deleteItem(itemId: string) {
-
-    // Aqui você pode adicionar a lógica para abrir um modal ou preencher um formulário com os dados do item selecionado para edição
-    // Em seguida, você pode chamar o serviço para atualizar o item no DynamoDB
-    this.updatedData.ID = itemId;
-    this.itemService.deleteItem(this.updatedData).subscribe(response => {
-      console.log(response);
-      // Aqui você pode adicionar a lógica para atualizar a lista de itens exibidos na tabela
-    });
-
-    this.search();
   }
 
-
-
-
-
-
-  callAPI() {
-    this.ID = Date.now()
-    this.apiService.salvar(this.ID, this.liner, this.tripcost, this.freetime, this.fsperiod, this.scperiod, this.tdperiod, this.comentario).subscribe(response => {
-    }, error => {
-      console.log(error);
-    });
-  }
 }

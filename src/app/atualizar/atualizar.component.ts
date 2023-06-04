@@ -2,22 +2,31 @@ import { CarregaService } from '../services/carrega_file/carrega.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { format, parse, differenceInDays } from 'date-fns';
-import { DynamoDBService } from '../services/contratos/consulta.service';
+import { ApiService } from '../services/contratos/contratos.service';
 import { map, take } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
+import { Item } from 'aws-sdk/clients/simpledb';
+import { Observable } from 'rxjs';
 
 
 
 @Component({
   selector: 'atualizar-root',
   templateUrl: './atualizar.component.html',
-  styleUrls: ['./atualizar.component.css']
+  styleUrls: ['./atualizar.component.css'],
+  template: `
+    <progressbar [value]="progressValue" [max]="100">{{ progressValue }}%</progressbar>
+  `
 })
 export class AtualizarComponent {
-
+  progressValue = 0; // Valor atual da barra de progresso
+  maxValue = 0; // Valor máximo da barra de progresso
+  showProgressBar = false;
   @ViewChild('downloadLink') downloadLink!: ElementRef<HTMLAnchorElement>;
-  query: string = '';
-  items$ = this.consultaContrato.getItems(this.query);
+  urlAtualiza: string = 'https://uj88w4ga9i.execute-api.sa-east-1.amazonaws.com/dev12';
+  urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
+  query: string = 'Pipeline_Inbound';
+  items$: Observable<any> | undefined;
   dataLoaded = false;
   jsonData: any;
   sortColumn: string = '';
@@ -36,6 +45,7 @@ export class AtualizarComponent {
   valorFree: string = '';
   liner: string = "";
   custoestadia: number = 0;
+  items: Item[] = [];
 
 
 
@@ -43,7 +53,8 @@ export class AtualizarComponent {
   constructor(
     private carregaService: CarregaService,
     private http: HttpClient,
-    private consultaContrato: DynamoDBService,
+    private dynamodbService: ApiService,
+
 
   ) { }
 
@@ -59,58 +70,76 @@ export class AtualizarComponent {
     this.jsonData = inflatedData;
     this.dataLoaded = true;
     // Chama a função para salvar os dados no API Gateway
-    this.saveDataToAPIGateway(inflatedData);
+
+
   }
 
+
+  salvarNoBanco() {
+    this.showProgressBar = true;
+    console.log('Item a ser salvo:', this.jsonData);
+    this.progressValue = 0;
+    this.maxValue = this.jsonData.length;
+
+    const batchSize = 10; // Defina o tamanho máximo para cada lote
+
+    const batches = this.chunkArray(this.jsonData, batchSize); // Fraciona o jsonData em lotes menores
+
+    for (const batch of batches) {
+      this.dynamodbService.salvar(batch, this.query, this.urlAtualiza).subscribe(
+        response => {
+          this.progressValue = this.progressValue + batch.length;
+          console.log('Resposta do salvamento:', response);
+        },
+        error => {
+          console.error('Erro ao salvar:', error);
+        }
+
+      );
+    }
+    setTimeout(() => {
+      this.showProgressBar = false;
+    }, 7000); // Defina o tempo adequado conforme necessário
+  }
+
+  chunkArray(array: any[], size: number): any[][] {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += size) {
+      chunks.push(array.slice(i, i + size));
+    }
+    return chunks;
+  }
 
   ngOnInit() {
 
     const key = 'liner'; // Substitua 'propriedade' pelo nome da propriedade que você deseja obter
+    const query = 'PowerMathDatabase2'
+    const filtro = '';
+    this.items$ = this.dynamodbService.getItems(query, this.urlConsulta, filtro).pipe(
+      map(data => {
+        const parsedData = JSON.parse(data.body); // Parse a string JSON contida em data.body
+        return parsedData; // Retorna o objeto JSON parseado
+      })
+    );
 
-    this.items$.pipe(
-      map(array => array.map(contratinho => contratinho[key])), // Obtém a propriedade desejada de cada item
-    ).subscribe((values) => {
-      this.contratos = values;
-      console.log(this.contratos); // Valores da propriedade específica no array
-    });
+    this.items$.subscribe(
+      items => {
+        this.contratos = items.map((item: { liner: any; }) => item.liner);
+        this.freetime = items.map((item: { freetime: any; }) => item.freetime);
+        this.tripcost = items.map((item: { tripcost: any; }) => item.tripcost);
+        this.handling = items.map((item: { fsperiod: any; }) => item.fsperiod);
+        this.demurrage = items.map((item: { scperiod: any; }) => item.scperiod);
 
-    this.items$.pipe(
-      map(array => array.map(contratinho => contratinho['freetime'])), // Obtém a propriedade desejada de cada item
-    ).subscribe((values) => {
-      this.freetime = values;
-      console.log(this.freetime); // Valores da propriedade específica no array
-    });
-
-    this.items$.pipe(
-      map(array => array.map(custoviagem => custoviagem['tripcost'])), // Obtém a propriedade desejada de cada item
-    ).subscribe((values) => {
-      this.tripcost = values;
-      console.log(this.tripcost); // Valores da propriedade específica no array
-    });
-
-    this.items$.pipe(
-      map(array => array.map(manuseio => manuseio['fsperiod'])), // Obtém a propriedade desejada de cada item
-    ).subscribe((values) => {
-      this.handling = values;
-      console.log(this.handling); // Valores da propriedade específica no array
-    });
-    this.items$.pipe(
-      map(array => array.map(estadia => estadia['scperiod'])), // Obtém a propriedade desejada de cada item
-    ).subscribe((values) => {
-      this.demurrage = values;
-      console.log(this.demurrage); // Valores da propriedade específica no array
-    });
-
+      },
+      error => {
+        console.error(error);
+      }
+    );
 
   }
 
-
   inflateData(rawData: any[]): any[] {
-
     return rawData.map((item: any) => {
-
-
-
       const today = new Date(); // Obter a data atual
       const ataDate = parse(item['ATA'], 'dd/MM/yyyy', new Date()); // Converter a data de string para objeto Date
 
@@ -131,16 +160,15 @@ export class AtualizarComponent {
 
       if (this.Freetime < 0) {
         this.custoestadia = +this.estadia * this.Freetime
-      }else{
+      } else {
         this.custoestadia = 0;
       }
       if (this.custoestadia < 0) {
         this.custoestadia = this.custoestadia * (-1);
       }
-
       const inflatedItem: any = {
-
-
+        'tableName': this.query,
+        'ID':item['Invoice'],
         'Process': item['Process'],
         'Container': item['Container'],
         'Channel': item['Channel'],
@@ -154,88 +182,17 @@ export class AtualizarComponent {
         'TripCost': this.custoViagem,
         'Handling': this.manuseio,
         'Demurrage': this.custoestadia
-
         // Adicione mais campos conforme necessário
       };
 
-      console.log(this.freetime);
-
-
 
       return inflatedItem;
+
     });
+
+
+
   }
-
-
-
-
-  async saveDataToAPIGateway(data: any[]) {
-    try {
-      const apiUrl = 'https://weskqpmdre.execute-api.sa-east-1.amazonaws.com/dev5'; // Substitua pela URL do seu API Gateway
-
-
-
-
-
-      const dataWithId = data.map((item: any) => {
-
-        // Gerar um ID aleatório com base nos critérios do objeto
-
-        var ATA = item['ATA'].replace(/\//g, '');
-        const ID = item['Invoice']
-
-        // Obtenha a data atual
-
-
-        const today = new Date();
-
-
-        const formattedDate = formatDate(today, 'dd/MM/yyyy', 'en-US');
-
-
-
-
-
-        // Adicionar o ID gerado ao objeto
-
-        return { ID, formattedDate, ...item };
-      });
-
-      const batchSize = 10; // Tamanho máximo de cada lote
-
-      // Dividir os dados em lotes menores
-      const batches = [];
-      for (let i = 0; i < dataWithId.length; i += batchSize) {
-        const batch = dataWithId.slice(i, i + batchSize);
-        batches.push(batch);
-      }
-
-      // Enviar cada lote separadamente para a API
-      for (const batch of batches) {
-        const jsonDataString = JSON.stringify(batch, null, 2);
-        const blob = new Blob([jsonDataString], { type: 'application/json' });
-
-        const downloadUrl = URL.createObjectURL(blob);
-        this.downloadLink.nativeElement.href = downloadUrl;
-        this.downloadLink.nativeElement.download = 'dados.json';
-        this.downloadLink.nativeElement.click();
-
-        try {
-          const response = await this.http.post(apiUrl, batch).toPromise();
-          console.log('Dados do lote salvos com sucesso no DynamoDB através do API Gateway!');
-        } catch (error) {
-          console.error('Erro ao salvar dados do lote no DynamoDB através do API Gateway:', error);
-        }
-      }
-
-      console.log('Todos os dados foram salvos com sucesso no DynamoDB através do API Gateway!');
-    } catch (error) {
-      console.error('Erro ao salvar dados no DynamoDB através do API Gateway:', error);
-    }
-  }
-
-
-
 
 
 

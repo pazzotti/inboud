@@ -10,6 +10,7 @@
           <button type="button" (click)="aplicarFiltroPorData()">Search</button>
           <input type="text" name="searchText" [(ngModel)]="searchText" (input)="filterItems()" placeholder="Find"
             class="ultimo-input">
+            <button type="button" (click)="calculateTotalDemurrage()">Calculate</button>
         </form>
 
         <table>
@@ -29,10 +30,9 @@
         <table>
           <thead>
             <tr>
-              <th [class.hide-column]="hideCheckColumn">
-                <button type="button" (click)="selecionarTodos()">
-                  {{ todosSelecionados ? 'Deselect All' : 'Select All' }}
-                </button>
+              <th *ngIf="!hideCheckColumn">
+                <input type="checkbox" (change)="selecionarTodos()"
+                  [checked]="todosSelecionados ? true : false">
               </th>
               <th>
                 <button (click)="sortBy('Process')">Process</button>
@@ -73,10 +73,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of itemsFiltrados">
-              <td [class.hide-column]="hideCheckColumn">
-                <input type="checkbox" [(ngModel)]="item.checked" (change)="calcularSomaDemurrage()"
-                  [checked]="item.checked">
+            <tr *ngFor="let item of itemsFiltrados; let f = index">
+              <td *ngIf="!hideCheckColumn">
+                <input type="checkbox"  [(ngModel)]="item.checked" (change)="toggleCheckedStatus(f,item)">
               </td>
               <td>{{ item.Process }}</td>
               <td>{{ item.Invoice }}</td>

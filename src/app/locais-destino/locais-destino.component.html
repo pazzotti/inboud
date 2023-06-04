@@ -1,0 +1,40 @@
+<body>
+  <ul>
+    <div>
+      <ng-container [ngTemplateOutlet]="itemTemplate"
+        [ngTemplateOutletContext]="{ $implicit: { local: '', endereco: '', contato: '' } }"></ng-container>
+
+      <ng-template #itemTemplate let-item>
+        <button mat-button (click)="editDialog(item, urlAtualiza, query)">
+          <span class="material-icons">note_add</span> Add new contract
+        </button>
+      </ng-template>
+    </div>
+    <table #myTable>
+      <thead>
+        <tr>
+          <th>Place</th>
+          <th>Address</th>
+          <th>Contact</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let item of items$ | async">
+        <tr [ngClass]="{ 'black-row': $even, 'grafiti-row': $odd }"> <!-- adicionando as classes de cor de fundo -->
+          <td>{{ item.local }}</td>
+          <td>{{ item.endereco }}</td>
+          <td>{{ item.contato }}</td>
+          <td> <!-- adicionando os botões de ação -->
+            <button mat-icon-button color="primary" aria-label="Edit" (click)="editDialog(item, urlAtualiza, query)">
+              <a>edit</a>
+            </button>
+            <span style="margin-left: 10px; margin-right: 10px;"> </span> <!-- espaço entre os botões -->
+            <button mat-icon-button color="warn" aria-label="Delete" (click)="deleteItem(item.ID)">
+              <a>delete</a>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ul>
+</body>

@@ -2,7 +2,11 @@
   <ul>
     <div>
       <input type="file" (change)="onFileSelected($event)">
+      <button class="data-save-btn" (click)="salvarNoBanco()">Data Save</button>
 
+        <div *ngIf="showProgressBar">
+          <progressbar [value]="progressValue" [max]="maxValue">{{ progressValue }} Saved lines</progressbar>
+        </div>
 
       <a #downloadLink style="display: none;"></a>
       <div *ngIf="dataLoaded">

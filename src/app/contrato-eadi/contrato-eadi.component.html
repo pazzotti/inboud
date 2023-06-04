@@ -1,7 +1,7 @@
 <body>
   <ul>
     <div>
-      <button mat-button (click)="openDialog(items, urlConsulta, query)">
+      <button mat-button (click)="openDialog()">
         <span class="material-icons">note_add</span> Add new contract
       </button>
     </div>
@@ -18,8 +18,8 @@
           <th>Action</th> <!-- adicionando uma coluna para os botões de ação -->
         </tr>
       </thead>
-      <tbody *ngFor="let item of items">
-        <tr [ngClass]="{ 'black-row': $even, 'grafiti-row': $odd }">
+      <tbody *ngFor="let item of items$ | async">
+        <tr [ngClass]="{ 'black-row': $even, 'grafiti-row': $odd }"> <!-- adicionando as classes de cor de fundo -->
           <td>{{ item.liner }}</td>
           <td> ${{ item.tripcost.toFixed(2) }}</td> <!-- adicionando o símbolo da moeda Real -->
           <td>{{ item.freetime }}</td>
@@ -28,11 +28,11 @@
           <td>{{ item.tdperiod }}</td>
           <td>{{ item.comentario }}</td>
           <td> <!-- adicionando os botões de ação -->
-            <button mat-icon-button color="primary" aria-label="Editar" (click)="editDialog(item, urlConsulta, query)">
+            <button mat-icon-button color="primary" aria-label="Editar" (click)="editDialog(dataSource, urlConsulta, query)">
               <a>edit</a>
             </button>
             <span style="margin-left: 10px; margin-right: 10px;"> </span> <!-- espaço entre os botões -->
-            <button mat-icon-button color="warn" aria-label="Excluir" (click)="deleteItem(item.ID, urlConsulta, query)">
+            <button mat-icon-button color="warn" aria-label="Excluir" (click)="deleteItem(item.ID)">
               <a>delete</a>
             </button>
           </td>
