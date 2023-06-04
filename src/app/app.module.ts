@@ -8,6 +8,9 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import { LiveFormDialogComponent } from './app/home/live-form-dialog/live-form-dialog.component';
+import { OrigemFormDialogComponent } from './app/home/locais-origem/origem-form-dialog.component';
+import { DestinoFormDialogComponent } from './app/home/locais-destino/destino-form-dialog.component';
+import { CarrierFormDialogComponent } from './app/home/carriers/carriers-form-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AtualizarComponent } from './atualizar/atualizar.component';
 import { Contrato_EADIComponent } from './contrato-eadi/contrato-eadi.component';
@@ -19,6 +22,7 @@ import { Locais_DestinoComponent } from './locais-destino/locais-destino.compone
 import { FormularioLocaisComponent } from './formulario_locais/formulario_locais';
 import { TelaUserComponentTransport } from './tela-user-transport/tela-user-transport.component';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { CarrierComponent } from './carriers/carriers.component';
 
 
 
@@ -27,6 +31,9 @@ import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
     AppComponent,
     HomeComponent,
     LiveFormDialogComponent,
+    OrigemFormDialogComponent,
+    DestinoFormDialogComponent,
+    CarrierFormDialogComponent,
     AtualizarComponent,
     Contrato_EADIComponent,
     Contrato_TerminalComponent,
@@ -35,7 +42,8 @@ import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
     Locais_OrigemComponent,
     Locais_DestinoComponent,
     FormularioLocaisComponent,
-    TelaUserComponentTransport
+    TelaUserComponentTransport,
+    CarrierComponent
 
   ],
   imports: [

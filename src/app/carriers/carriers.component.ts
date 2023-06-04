@@ -2,27 +2,27 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Food } from '../shared/models/Food';
 import { ApiService } from '../services/contratos/contratos.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { OrigemFormDialogComponent } from '../app/home/locais-origem/origem-form-dialog.component';
+import { CarrierFormDialogComponent } from '../app/home/carriers/carriers-form-dialog.component';
 import { Observable, map, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { format } from 'date-fns';
 
 
 @Component({
-  selector: 'app-locais-origem',
-  templateUrl: './locais-origem.component.html',
-  styleUrls: ['./locais-origem.component.css']
+  selector: 'app-carriers-destino',
+  templateUrl: './carriers.component.html',
+  styleUrls: ['./carriers.component.css']
 })
 
-export class Locais_OrigemComponent {
+export class CarrierComponent {
   urlAtualiza: string = 'https://uj88w4ga9i.execute-api.sa-east-1.amazonaws.com/dev12';
   urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
-  query: string = 'Locais_Origem_Inbound';
+  query: string = 'Carriers';
   data: any;
   foods: Food[] = [];
   base: number = 3;
   ID: number = Date.now();
-  local: string = "";
+  name: string = "";
   contato: string = "";
   endereco: string = "";
   comentario: string = "";
@@ -38,7 +38,7 @@ export class Locais_OrigemComponent {
   }
 
   editDialog(item: Array<any>, url: string, table: string): void {
-    const dialogRef = this.dialog.open(OrigemFormDialogComponent, {
+    const dialogRef = this.dialog.open(CarrierFormDialogComponent, {
       data: {
         itemsData: item,
         url: url,
@@ -63,7 +63,7 @@ export class Locais_OrigemComponent {
   }
 
   openDialog(item: Array<any>, url: string, table: string): void {
-    const dialogRef = this.dialog.open(OrigemFormDialogComponent, {
+    const dialogRef = this.dialog.open(CarrierFormDialogComponent, {
       data: {
         itemsData: [],
         url: url,

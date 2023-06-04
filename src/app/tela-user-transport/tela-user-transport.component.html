@@ -43,8 +43,8 @@
               <th>
                 <button (click)="sortBy2('Demurrage')">Demurrage</button>
               </th>
-              <th>Devolver Vazio</th>
-              <th>Reutilizar</th>
+              <th>Empty Return</th>
+              <th>Reused</th>
             </tr>
           </thead>
           <tbody>
@@ -65,10 +65,10 @@
               <td>{{ item.Handling | currency:'BRL':'symbol':'1.2-2' }}</td>
               <td>{{ item.Demurrage | currency:'USD':'symbol':'1.2-2' }}</td>
               <td>
-                <button (click)="devolverVazio(item)">Devolver Vazio</button>
+                <button (click)="devolverVazio(item)">Empty Return</button>
               </td>
               <td>
-                <button (click)="reutilizar(item)">Reutilizar</button>
+                <button (click)="reutilizar(item)">Reuse</button>
               </td>
             </tr>
           </tbody>

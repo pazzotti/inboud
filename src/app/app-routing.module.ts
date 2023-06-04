@@ -11,6 +11,7 @@ import { Contrato_TransportadoraComponent } from './contrato-transportadora/cont
 import { Contrato_TerminalComponent } from './contrato-terminal/contrato-terminal.component';
 import { Locais_DestinoComponent } from './locais-destino/locais-destino.component';
 import { Locais_OrigemComponent } from './locais-origem/locais-origem.component';
+import { CarrierComponent } from './carriers/carriers.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path:'contrato_terminal',component:Contrato_TerminalComponent},
   {path:'locais_destino',component:Locais_DestinoComponent},
   {path:'locais_origem',component:Locais_OrigemComponent},
+  {path:'carrier',component:CarrierComponent},
 
 ];
 

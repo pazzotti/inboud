@@ -8,7 +8,7 @@
     <table>
       <thead>
         <tr>
-          <th>Place</th>
+          <th>Carrier Name</th>
           <th>e-mail</th>
           <th>Address</th>
           <th>Action</th>
@@ -16,7 +16,7 @@
       </thead>
       <tbody *ngFor="let item of items">
         <tr [ngClass]="{ 'black-row': $even, 'grafiti-row': $odd }">
-          <td>{{ item.local }}</td>
+          <td>{{ item.name }}</td>
           <td>{{ item.contato }}</td>
           <td>{{ item.endereco }}</td>
           <td> <!-- adicionando os botões de ação -->
