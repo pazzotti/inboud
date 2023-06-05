@@ -65,10 +65,10 @@
               <td>{{ item.Handling | currency:'BRL':'symbol':'1.2-2' }}</td>
               <td>{{ item.Demurrage | currency:'USD':'symbol':'1.2-2' }}</td>
               <td>
-                <button (click)="devolverVazio(item)">Empty Return</button>
+                <button (click)="containerReuse(item, urlConsulta, query)">Reuse</button>
               </td>
               <td>
-                <button (click)="reutilizar(item)">Reuse</button>
+                <button (click)="reutilizar(item)">Empty Return</button>
               </td>
             </tr>
           </tbody>

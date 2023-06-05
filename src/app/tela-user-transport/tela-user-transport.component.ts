@@ -4,6 +4,8 @@ import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { ApiService } from '../services/contratos/contratos.service';
 import { AppModule } from '../app.module';
+import { DevolverVazioFormDialogComponent } from '../app/home/devolver_vazio/devolver-vazio-form-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 
@@ -21,15 +23,16 @@ export class TelaUserComponentTransport implements OnInit {
   filtroDataInicio: Date = new Date();
   filtroDataTermino: Date = new Date();
   itemsFiltrados: any[] = [];
-  searchText: string='';
-  items2: any[] = [ /* Seus itens aqui */ ];
+  searchText: string = '';
+  items2: any[] = [ /* Seus itens aqui */];
   private searchTextSubject = new Subject<string>();
   private searchTextSubscription!: Subscription;
   urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
   query: string = 'Pipeline_Inbound';
+  data: any;
 
 
-  constructor(private dynamoDBService: ApiService) { }
+  constructor(private dynamoDBService: ApiService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.searchTextSubscription = this.searchTextSubject.pipe(debounceTime(300)).subscribe(() => {
@@ -37,6 +40,59 @@ export class TelaUserComponentTransport implements OnInit {
     });
     this.getItemsFromDynamoDB();
     this.calcularSomaDemurrage();
+  }
+
+  editDialog(item: Array<any>, url: string, table: string): void {
+    const dialogRef = this.dialog.open(DevolverVazioFormDialogComponent, {
+      data: {
+        itemsData: item,
+        url: url,
+        query: table
+      },
+      height: '350px',
+      minWidth: '450px',
+      position: {
+        top: '10vh',
+        left: '30vw'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        setTimeout(() => {
+          this.getItemsFromDynamoDB();
+        }, 200); // Ajuste o tempo de atraso conforme necessário
+      }
+      console.log('The dialog was closed');
+    });
+  }
+
+  containerReuse(item: Array<any>, url: string, table: string): void {
+    const dialogRef = this.dialog.open(DevolverVazioFormDialogComponent, {
+      data: {
+        itemsData: item,
+        url: url,
+        query: table
+      },
+      height: '350px',
+      minWidth: '450px',
+      position: {
+        top: '10vh',
+        left: '30vw'
+      },
+
+
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        setTimeout(() => {
+          this.getItemsFromDynamoDB();
+        }, 200); // Ajuste o tempo de atraso conforme necessário
+      }
+      console.log('The dialog was closed');
+
+    });
   }
 
   ngOnDestroy() {

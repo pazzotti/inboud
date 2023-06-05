@@ -5,7 +5,6 @@ import { format, parse, differenceInDays } from 'date-fns';
 import { ApiService } from '../services/contratos/contratos.service';
 import { map, take } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
-import { Item } from 'aws-sdk/clients/simpledb';
 import { Observable } from 'rxjs';
 
 
@@ -45,7 +44,7 @@ export class AtualizarComponent {
   valorFree: string = '';
   liner: string = "";
   custoestadia: number = 0;
-  items: Item[] = [];
+
 
 
 
@@ -173,6 +172,7 @@ export class AtualizarComponent {
         'Container': item['Container'],
         'Channel': item['Channel'],
         'Step': item['Step'],
+        'ClearancePlace': item['ClearancePlace'],
         'Transport': item['Transport'],
         'Invoice': item['Invoice'],
         'Liner': item['Liner'],

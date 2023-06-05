@@ -22,9 +22,6 @@ export class CarrierComponent {
   foods: Food[] = [];
   base: number = 3;
   ID: number = Date.now();
-  name: string = "";
-  contato: string = "";
-  endereco: string = "";
   comentario: string = "";
   exponent: number = 22;
   $even: any;
@@ -44,8 +41,8 @@ export class CarrierComponent {
         url: url,
         query: table
       },
-      height: '550px',
-      minWidth: '850px',
+      height: '350px',
+      minWidth: '450px',
       position: {
         top: '10vh',
         left: '30vw'
@@ -69,8 +66,8 @@ export class CarrierComponent {
         url: url,
         query: table
       },
-      height: '550px',
-      minWidth: '850px',
+      height: '350px',
+      minWidth: '450px',
       position: {
         top: '10vh',
         left: '30vw'

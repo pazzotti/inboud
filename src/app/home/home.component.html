@@ -18,8 +18,8 @@
           <th>Action</th> <!-- adicionando uma coluna para os botões de ação -->
         </tr>
       </thead>
-      <tbody *ngFor="let item of items">
-        <tr [ngClass]="{ 'black-row': $even, 'grafiti-row': $odd }">
+      <tbody >
+        <tr *ngFor="let item of items; let even = even; let odd = odd" [class.even]="even" [class.odd]="odd">
           <td>{{ item.liner }}</td>
           <td> ${{ item.tripcost.toFixed(2) }}</td> <!-- adicionando o símbolo da moeda Real -->
           <td>{{ item.freetime }}</td>
@@ -27,13 +27,12 @@
           <td>${{ item.scperiod.toFixed(2) }}</td>
           <td>{{ item.tdperiod }}</td>
           <td>{{ item.comentario }}</td>
-          <td> <!-- adicionando os botões de ação -->
+          <td class="action-buttons">
             <button mat-icon-button color="primary" aria-label="Editar" (click)="editDialog(item, urlConsulta, query)">
-              <a>edit</a>
+              <span class="material-icons">edit</span>
             </button>
-            <span style="margin-left: 10px; margin-right: 10px;"> </span> <!-- espaço entre os botões -->
             <button mat-icon-button color="warn" aria-label="Excluir" (click)="deleteItem(item.ID, urlConsulta, query)">
-              <a>delete</a>
+              <span class="material-icons">delete</span>
             </button>
           </td>
         </tr>

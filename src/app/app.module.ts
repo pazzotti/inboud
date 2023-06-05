@@ -8,13 +8,14 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import { LiveFormDialogComponent } from './app/home/live-form-dialog/live-form-dialog.component';
+import { ContratoTerminalFormDialogComponent } from './app/home/contrato_terminal/contrato-terminal-form-dialog.component';
 import { OrigemFormDialogComponent } from './app/home/locais-origem/origem-form-dialog.component';
 import { DestinoFormDialogComponent } from './app/home/locais-destino/destino-form-dialog.component';
 import { CarrierFormDialogComponent } from './app/home/carriers/carriers-form-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AtualizarComponent } from './atualizar/atualizar.component';
 import { Contrato_EADIComponent } from './contrato-eadi/contrato-eadi.component';
-import { Contrato_TerminalComponent } from './contrato-terminal/contrato-terminal.component';
+import { ContratoTerminalComponent } from './contrato-terminal/contrato-terminal.component';
 import { Contrato_RedexComponent } from './contrato-redex/contrato-redex.component';
 import { Contrato_TransportadoraComponent } from './contrato-transportadora/contrato-transportadora.component';
 import { Locais_OrigemComponent } from './locais-origem/locais-origem.component';
@@ -23,6 +24,8 @@ import { FormularioLocaisComponent } from './formulario_locais/formulario_locais
 import { TelaUserComponentTransport } from './tela-user-transport/tela-user-transport.component';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { CarrierComponent } from './carriers/carriers.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devolver-vazio-form-dialog.component';
 
 
 
@@ -36,19 +39,22 @@ import { CarrierComponent } from './carriers/carriers.component';
     CarrierFormDialogComponent,
     AtualizarComponent,
     Contrato_EADIComponent,
-    Contrato_TerminalComponent,
+    ContratoTerminalComponent,
     Contrato_RedexComponent,
     Contrato_TransportadoraComponent,
     Locais_OrigemComponent,
     Locais_DestinoComponent,
     FormularioLocaisComponent,
     TelaUserComponentTransport,
-    CarrierComponent
+    CarrierComponent,
+    ContratoTerminalFormDialogComponent,
+    DevolverVazioFormDialogComponent
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     HeaderModule,
     HttpClientModule,
     FormsModule,

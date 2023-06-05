@@ -57,11 +57,13 @@ td {
   text-align: center;
   padding: 10px;
   border: 1px solid #404040;
+  border-radius: 7px;
 }
 
 th {
   background-color: #393939;
   border-bottom: 2px solid #404040;
+  border-radius: 7px;
 }
 p {
   background-color: #f7f0f0;
@@ -121,4 +123,31 @@ div {
     background-color: #424242;
     color: white;
   }
+
+  tr.header-row {
+    background-color: rgb(13, 11, 26); /* Substitua pela cor desejada para a primeira linha */
+    color: #fff; /* Cor do texto para a primeira linha */
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .action-buttons button {
+    padding: 5px;
+    font-size: 20px;
+  }
+
+  .action-buttons button .material-icons {
+    font-size: 20px;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
 
