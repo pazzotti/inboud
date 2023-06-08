@@ -26,6 +26,7 @@ import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { CarrierComponent } from './carriers/carriers.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devolver-vazio-form-dialog.component';
+import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/container-reuse-form-dialog.component';
 
 
 
@@ -48,7 +49,8 @@ import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devo
     TelaUserComponentTransport,
     CarrierComponent,
     ContratoTerminalFormDialogComponent,
-    DevolverVazioFormDialogComponent
+    DevolverVazioFormDialogComponent,
+    ContainerReuseFormDialogComponent
 
   ],
   imports: [

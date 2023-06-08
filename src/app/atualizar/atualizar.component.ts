@@ -60,7 +60,6 @@ export class AtualizarComponent {
   async onFileSelected(event: any) {
     const file: File = event.target.files[0];
     const fileUrl = URL.createObjectURL(file);
-
     const rawData = await this.carregaService.loadFile(fileUrl);
     const inflatedData = this.inflateData(rawData); // Inflar os campos desejados
 
@@ -85,6 +84,16 @@ export class AtualizarComponent {
     const batches = this.chunkArray(this.jsonData, batchSize); // Fraciona o jsonData em lotes menores
 
     for (const batch of batches) {
+      // Acrescentar o campo "lastupdate" com o valor da data de hoje
+      const currentDate = new Date();
+      const formattedDate = currentDate.getDate().toString().padStart(2, '0') +
+                            (currentDate.getMonth() + 1).toString().padStart(2, '0') +
+                            currentDate.getFullYear().toString();
+
+      for (const item of batch) {
+        item.lastupdate = formattedDate;
+      }
+
       this.dynamodbService.salvar(batch, this.query, this.urlAtualiza).subscribe(
         response => {
           this.progressValue = this.progressValue + batch.length;
@@ -93,13 +102,14 @@ export class AtualizarComponent {
         error => {
           console.error('Erro ao salvar:', error);
         }
-
       );
     }
+
     setTimeout(() => {
       this.showProgressBar = false;
     }, 7000); // Defina o tempo adequado conforme necessário
   }
+
 
   chunkArray(array: any[], size: number): any[][] {
     const chunks = [];
@@ -137,88 +147,100 @@ export class AtualizarComponent {
 
   }
 
-  inflateData(rawData: any[]): any[] {
-    return rawData.map((item: any) => {
-      const today = new Date(); // Obter a data atual
-      const ataDate = parse(item['ATA'], 'dd/MM/yyyy', new Date()); // Converter a data de string para objeto Date
-
-      const diffInDays = differenceInDays(today, ataDate); // Calcular a diferença em dias
-      let i = 0;
-      while (i < this.freetime.length) {
-
-        if (item['Liner'] === this.contratos[i]) {
-          this.valorFree = this.freetime[i];
-          this.custoViagem = this.tripcost[i];
-          this.manuseio = this.handling[i];
-          this.estadia = this.demurrage[i];
-        }
-        i = i + 1;
-
-      }
-      this.Freetime = +this.valorFree - diffInDays; //calculo o numero de dias de freetime
-
-      if (this.Freetime < 0) {
-        this.custoestadia = +this.estadia * this.Freetime
+  testarArquivo(arquivo: File): void {
+    this.carregaService.testarArquivoCSV(arquivo).then((estaCorreto) => {
+      if (estaCorreto) {
+        console.log('O arquivo CSV está correto.');
       } else {
-        this.custoestadia = 0;
+        console.log('O arquivo CSV está incorreto.');
       }
-      if (this.custoestadia < 0) {
-        this.custoestadia = this.custoestadia * (-1);
-      }
-      const inflatedItem: any = {
-        'tableName': this.query,
-        'ID':item['Invoice'],
-        'Process': item['Process'],
-        'Container': item['Container'],
-        'Channel': item['Channel'],
-        'Step': item['Step'],
-        'ClearancePlace': item['ClearancePlace'],
-        'Transport': item['Transport'],
-        'Invoice': item['Invoice'],
-        'Liner': item['Liner'],
-        'ATA': item['ATA'],
-        'Dias': diffInDays,
-        'FreeTime': this.Freetime,
-        'TripCost': this.custoViagem,
-        'Handling': this.manuseio,
-        'Demurrage': this.custoestadia
-        // Adicione mais campos conforme necessário
-      };
-
-
-      return inflatedItem;
-
+    }).catch((erro) => {
+      console.error('Erro ao testar o arquivo CSV:', erro);
     });
-
-
-
   }
 
+inflateData(rawData: any[]): any[] {
+  return rawData.map((item: any) => {
+    const today = new Date(); // Obter a data atual
+    const ataDate = parse(item['ATA'], 'dd/MM/yyyy', new Date()); // Converter a data de string para objeto Date
 
+    const diffInDays = differenceInDays(today, ataDate); // Calcular a diferença em dias
+    let i = 0;
+    while (i < this.freetime.length) {
 
-  sortBy(column: string) {
-    if (this.sortColumn === column) {
-      // Reverse the sort direction
-      this.sortDirection *= -1;
-    } else {
-      // Set the new sort column and reset the sort direction
-      this.sortColumn = column;
-      this.sortDirection = 1;
+      if (item['Liner'] === this.contratos[i]) {
+        this.valorFree = this.freetime[i];
+        this.custoViagem = this.tripcost[i];
+        this.manuseio = this.handling[i];
+        this.estadia = this.demurrage[i];
+      }
+      i = i + 1;
+
     }
+    this.Freetime = +this.valorFree - diffInDays; //calculo o numero de dias de freetime
 
-    // Sort the data array based on the selected column and direction
-    this.jsonData.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
-      const valueA = a[this.sortColumn];
-      const valueB = b[this.sortColumn];
+    if (this.Freetime < 0) {
+      this.custoestadia = +this.estadia * this.Freetime
+    } else {
+      this.custoestadia = 0;
+    }
+    if (this.custoestadia < 0) {
+      this.custoestadia = this.custoestadia * (-1);
+    }
+    const inflatedItem: any = {
+      'tableName': this.query,
+      'ID': item['Invoice'],
+      'Process': item['Process'],
+      'Container': item['Container'],
+      'Channel': item['Channel'],
+      'Step': item['Step'],
+      'ClearancePlace': item['ClearancePlace'],
+      'Transport': item['Transport'],
+      'Invoice': item['Invoice'],
+      'Liner': item['Liner'],
+      'ATA': item['ATA'],
+      'Dias': diffInDays,
+      'FreeTime': this.Freetime,
+      'TripCost': this.custoViagem,
+      'Handling': this.manuseio,
+      'Demurrage': this.custoestadia
+      // Adicione mais campos conforme necessário
+    };
 
-      if (valueA < valueB) {
-        return -1 * this.sortDirection;
-      } else if (valueA > valueB) {
-        return 1 * this.sortDirection;
-      } else {
-        return 0;
-      }
-    });
+
+    return inflatedItem;
+
+  });
+
+
+
+}
+
+
+
+sortBy(column: string) {
+  if (this.sortColumn === column) {
+    // Reverse the sort direction
+    this.sortDirection *= -1;
+  } else {
+    // Set the new sort column and reset the sort direction
+    this.sortColumn = column;
+    this.sortDirection = 1;
   }
+
+  // Sort the data array based on the selected column and direction
+  this.jsonData.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
+    const valueA = a[this.sortColumn];
+    const valueB = b[this.sortColumn];
+
+    if (valueA < valueB) {
+      return -1 * this.sortDirection;
+    } else if (valueA > valueB) {
+      return 1 * this.sortDirection;
+    } else {
+      return 0;
+    }
+  });
+}
 
 }

@@ -15,8 +15,12 @@ export class CarregaService {
       .then(response => response || '');
   }
 
+
   processData(fileContent: string): any[] {
-    const parsedData = this.papa.parse(fileContent, { header: true }).data;
+    const parsedData = this.papa.parse(fileContent, {
+      header: true,
+      delimiter: ';'
+    }).data;
     const result = [];
     const seen = new Set();
     for (const row of parsedData) {
@@ -24,13 +28,12 @@ export class CarregaService {
         'Process': Process,
         'Container Id': Container,
         ' Channel': Channel,
-        'Old Supplier Number': oldSupplierNumber,
         'Clearance Place': ClearancePlace,
         'Step': Step,
-        'Transp. Type':Transport,
+        'Transp. Type': Transport,
         'Invoice Number': Invoice,
-        'SLine':Liner,
-        'ATA':ATA
+        'SLine': Liner,
+        'ATA': ATA
         // Continuar com os ajustes para as demais propriedades
       } = row;
 
@@ -64,4 +67,78 @@ export class CarregaService {
     const data = this.processData(fileContent);
     return data;
   }
+
+  testarArquivoCSV(arquivo: File): Promise<TesteArquivoResultado> {
+    return new Promise<TesteArquivoResultado>((resolve, reject) => {
+      this.papa.parse(arquivo, {
+        complete: (result: any) => {
+          const dados = result.data;
+          const cabecalho = result.meta.fields;
+          const erros = result.errors;
+          const estaCorreto = this.validarArquivoCSV(dados, cabecalho, erros);
+          const resultado: TesteArquivoResultado = {
+            estaCorreto,
+            dados,
+            cabecalho,
+            erros
+          };
+          resolve(resultado);
+        },
+        error: (error) => {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  validarArquivoCSV(dados: any[], cabecalho: string[], erros: any[]): boolean {
+    // Verificar se existem erros de parsing no arquivo
+    if (erros && erros.length > 0) {
+      return false;
+    }
+
+    // Verificar se o cabeçalho está correto
+    const cabecalhoEsperado = ['Process', 'Container Id', 'Channel', 'Clearance Place', 'Step', 'Transp. Type', 'Invoice Number', 'SLine', 'ATA'];
+    if (!cabecalho || !this.arrayEquals(cabecalho, cabecalhoEsperado)) {
+      return false;
+    }
+
+    // Verificar se os dados estão corretos
+    if (!dados || dados.length === 0) {
+      return false;
+    }
+
+    // Verificar se todos os dados estão preenchidos corretamente
+    for (const row of dados) {
+      if (!row || Object.values(row).some(value => value === null || value === undefined || value === '')) {
+        return false;
+      }
+    }
+
+    // Se chegou até aqui, o arquivo está correto
+    return true;
+  }
+
+  // Função auxiliar para verificar se dois arrays são iguais
+  arrayEquals(arr1: any[], arr2: any[]): boolean {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+}
+
+interface TesteArquivoResultado {
+  estaCorreto: boolean;
+  dados: any[];
+  cabecalho: string[];
+  erros: any[];
+
 }

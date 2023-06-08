@@ -76,28 +76,31 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of itemsFiltrados; let f = index">
+            <tr *ngFor="let item of itemsFiltrados; let f = index" [ngClass]="{ 'verde-row': item.Step === 'Reused' }">
               <td *ngIf="!hideCheckColumn">
-                <input type="checkbox"  [(ngModel)]="item.checked" (change)="toggleCheckedStatus(f,item)">
+                <input type="checkbox" [(ngModel)]="item.checked" (change)="toggleCheckedStatus(f, item)">
               </td>
               <td>{{ item.Process }}</td>
               <td>{{ item.Invoice }}</td>
               <td>{{ item.Container }}</td>
-              <td>{{ item.Step }}</td>
+              <td [ngClass]="{
+                'verde-valores': item.Step === 'Reused' || item.Step === 'Empty Return'
+              }">{{ item.Step }}</td>
               <td>{{ item.Liner }}</td>
               <td>{{ item.ClearancePlace }}</td>
-              <td [ngClass]="{ 'verde-value': item.Channel == 'VERDE', 'negative-value': item.Channel == 'VERMELHO' }">
-                {{ item.Channel }}</td>
+              <td [ngClass]="{ 'verde-value': item.Channel === 'VERDE', 'negative-value': item.Channel === 'VERMELHO' }">
+                {{ item.Channel }}
+              </td>
               <td>{{ item.ATA }}</td>
               <td>{{ item.Dias }}</td>
-              <td
-                [ngClass]="{ 'negative-value': item.FreeTime < 0, 'danger-value': item.FreeTime < 2 && item.FreeTime >= 0 }">
+              <td [ngClass]="{ 'negative-value': item.FreeTime < 0, 'danger-value': item.FreeTime < 2 && item.FreeTime >= 0 }">
                 {{ item.FreeTime }}</td>
               <td>{{ item.TripCost | currency:'USD':'symbol':'1.2-2' }}</td>
               <td>{{ item.Handling | currency:'BRL':'symbol':'1.2-2' }}</td>
               <td>{{ item.Demurrage | currency:'USD':'symbol':'1.2-2' }}</td>
             </tr>
           </tbody>
+
         </table>
       </div>
     </div>

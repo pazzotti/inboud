@@ -5,6 +5,7 @@ import { Subject, Subscription } from 'rxjs';
 import { ApiService } from '../services/contratos/contratos.service';
 import { AppModule } from '../app.module';
 import { DevolverVazioFormDialogComponent } from '../app/home/devolver_vazio/devolver-vazio-form-dialog.component';
+import { ContainerReuseFormDialogComponent } from '../app/home/container_reuse/container-reuse-form-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 
@@ -42,7 +43,9 @@ export class TelaUserComponentTransport implements OnInit {
     this.calcularSomaDemurrage();
   }
 
-  editDialog(item: Array<any>, url: string, table: string): void {
+
+
+  devolverVazio(item: Array<any>, url: string, table: string): void {
     const dialogRef = this.dialog.open(DevolverVazioFormDialogComponent, {
       data: {
         itemsData: item,
@@ -55,44 +58,44 @@ export class TelaUserComponentTransport implements OnInit {
         top: '10vh',
         left: '30vw'
       },
+
+
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         setTimeout(() => {
           this.getItemsFromDynamoDB();
-        }, 200); // Ajuste o tempo de atraso conforme necessário
+        }, 700); // Ajuste o tempo de atraso conforme necessário
       }
-      console.log('The dialog was closed');
+
     });
   }
 
-  containerReuse(item: Array<any>, url: string, table: string): void {
-    const dialogRef = this.dialog.open(DevolverVazioFormDialogComponent, {
-      data: {
-        itemsData: item,
-        url: url,
-        query: table
-      },
-      height: '350px',
-      minWidth: '450px',
-      position: {
-        top: '10vh',
-        left: '30vw'
-      },
+  reutilizar(item: Array<any>, url: string, table: string): void {const dialogRef = this.dialog.open(ContainerReuseFormDialogComponent, {
+    data: {
+      itemsData: item,
+      url: url,
+      query: table
+    },
+    height: '350px',
+    minWidth: '450px',
+    position: {
+      top: '10vh',
+      left: '30vw'
+    },
 
 
-    });
+  });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        setTimeout(() => {
-          this.getItemsFromDynamoDB();
-        }, 200); // Ajuste o tempo de atraso conforme necessário
-      }
-      console.log('The dialog was closed');
+  dialogRef.afterClosed().subscribe((result: any) => {
+    if (result) {
+      setTimeout(() => {
+        this.getItemsFromDynamoDB();
+      }, 700); // Ajuste o tempo de atraso conforme necessário
+    }
 
-    });
+  });
   }
 
   ngOnDestroy() {
@@ -132,19 +135,6 @@ export class TelaUserComponentTransport implements OnInit {
   }
   calcularSomaDemurrage(): number {
     return this.itemsFiltrados.reduce((sum, item) => sum + Number(item.Demurrage), 0);
-  }
-
-
-  devolverVazio(item: any): void {
-    // Implemente a lógica para devolver vazio aqui
-    // Por exemplo, você pode fazer uma chamada à API para atualizar o item no banco de dados
-    console.log("Devolver Vazio:", item);
-  }
-
-  reutilizar(item: any): void {
-    // Implemente a lógica para reutilizar aqui
-    // Por exemplo, você pode fazer uma chamada à API para atualizar o item no banco de dados
-    console.log("Reutilizar:", item);
   }
 
   getItemsFromDynamoDB(): void {
