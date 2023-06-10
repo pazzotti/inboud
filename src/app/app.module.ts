@@ -28,8 +28,6 @@ import { CarrierComponent } from './carriers/carriers.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devolver-vazio-form-dialog.component';
 import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/container-reuse-form-dialog.component';
-import { CalendarCommonModule, CalendarUtils, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 
@@ -65,8 +63,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    CalendarCommonModule,
-    BrowserModule, CalendarCommonModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    BrowserModule,
     HeaderModule,
     HttpClientModule,
     FormsModule,
