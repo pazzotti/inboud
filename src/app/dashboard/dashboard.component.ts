@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { CalendarView, CalendarEvent } from 'angular-calendar';
 import { ApiService } from 'src/app/services/contratos/contratos.service';
-import { of } from 'rxjs';
-
 
 
 
