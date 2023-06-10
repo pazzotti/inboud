@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import { LiveFormDialogComponent } from './app/home/live-form-dialog/live-form-dialog.component';
 import { ContratoTerminalFormDialogComponent } from './app/home/contrato_terminal/contrato-terminal-form-dialog.component';
+import { ContratoTransportadoraFormDialogComponent } from './app/home/contrato_transportadora/contrato-transportadora-form-dialog.component';
 import { OrigemFormDialogComponent } from './app/home/locais-origem/origem-form-dialog.component';
 import { DestinoFormDialogComponent } from './app/home/locais-destino/destino-form-dialog.component';
 import { CarrierFormDialogComponent } from './app/home/carriers/carriers-form-dialog.component';
@@ -17,7 +18,7 @@ import { AtualizarComponent } from './atualizar/atualizar.component';
 import { Contrato_EADIComponent } from './contrato-eadi/contrato-eadi.component';
 import { ContratoTerminalComponent } from './contrato-terminal/contrato-terminal.component';
 import { Contrato_RedexComponent } from './contrato-redex/contrato-redex.component';
-import { Contrato_TransportadoraComponent } from './contrato-transportadora/contrato-transportadora.component';
+import { ContratoTransportadoraComponent } from './contrato-transportadora/contrato-transportadora.component';
 import { Locais_OrigemComponent } from './locais-origem/locais-origem.component';
 import { Locais_DestinoComponent } from './locais-destino/locais-destino.component';
 import { FormularioLocaisComponent } from './formulario_locais/formulario_locais';
@@ -27,6 +28,12 @@ import { CarrierComponent } from './carriers/carriers.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devolver-vazio-form-dialog.component';
 import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/container-reuse-form-dialog.component';
+import { NgChartsModule } from 'ng2-charts';
+import { CalendarModule } from 'angular-calendar';
+import { CalendarCommonModule, CalendarUtils, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
 
 
 
@@ -35,14 +42,16 @@ import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/co
     AppComponent,
     HomeComponent,
     LiveFormDialogComponent,
+    ContratoTransportadoraFormDialogComponent,
     OrigemFormDialogComponent,
     DestinoFormDialogComponent,
+    DashboardComponent,
     CarrierFormDialogComponent,
     AtualizarComponent,
     Contrato_EADIComponent,
     ContratoTerminalComponent,
     Contrato_RedexComponent,
-    Contrato_TransportadoraComponent,
+    ContratoTransportadoraComponent,
     Locais_OrigemComponent,
     Locais_DestinoComponent,
     FormularioLocaisComponent,
@@ -50,18 +59,23 @@ import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/co
     CarrierComponent,
     ContratoTerminalFormDialogComponent,
     DevolverVazioFormDialogComponent,
-    ContainerReuseFormDialogComponent
+    ContainerReuseFormDialogComponent,
+
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    CalendarCommonModule,
+    BrowserModule, CalendarCommonModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     HeaderModule,
     HttpClientModule,
     FormsModule,
     MatDialogModule,
     BrowserAnimationsModule,
+    NgChartsModule,
+    CalendarModule,
     BrowserAnimationsModule,
     ProgressbarModule.forRoot()
   ],

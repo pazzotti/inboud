@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';  // <<<< import it here
   providers: [],
   bootstrap: []
 })
-export class Contrato_TransportadoraModule { }
+export class Contrato_TerminalModule { }
 
 
 

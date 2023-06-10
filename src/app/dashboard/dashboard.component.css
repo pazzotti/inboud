@@ -75,11 +75,11 @@ tr:nth-child(even) {
 }
 
 tr:nth-child(odd) {
-  background-color: #615a5a;
+  background-color: #070707;
 }
 
-tr:hover {
-  background-color: #aa0d0d;
+td:hover {
+  background-color: #f8f7f7;
 }
 div {
   margin-top: 2px;
@@ -116,17 +116,6 @@ div {
 
   .black-row {
     background-color: black;
-    color: white;
-  }
-
-  .grafiti-row {
-    background-color: #424242;
-    color: white;
-  }
-
-  tr.header-row {
-    background-color: rgb(13, 11, 26); /* Substitua pela cor desejada para a primeira linha */
-    color: #fff; /* Cor do texto para a primeira linha */
   }
 
   .action-buttons {
@@ -143,11 +132,29 @@ div {
   .action-buttons button .material-icons {
     font-size: 20px;
   }
-  .chart-container {
-    width: 400px;
-    height: 300px;
-    display: inline-block;
+
+
+
+  .chart-td {
+    text-align: center;
+    vertical-align: middle;
   }
+
+  .chart-container {
+    text-align: center; /* Ajuste para centralizar o conteúdo horizontalmente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 390px; /* ou a altura desejada para o gráfico */
+  }
+
+  .label-white {
+    color: white;
+  }
+  .component-spacing {
+    margin-left: 10px;
+  }
+
 
 
 

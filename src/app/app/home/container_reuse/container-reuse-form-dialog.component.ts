@@ -32,6 +32,7 @@ export class ContainerReuseFormDialogComponent {
   selectedPlace: FormControl = new FormControl('', Validators.required);
   itemsOrigin: any[] | undefined;
   placesOrigin: any[] | undefined;
+placesCarriers: any;
 
   constructor(
     private formBuilder: FormBuilder,

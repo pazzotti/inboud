@@ -1,0 +1,41 @@
+<body>
+  <ul>
+    <div>
+      <form>
+        <label class="label-white component-spacing" for="startDate">Start Date:</label>
+        <input type="date" id="startDate" [(ngModel)]="startDate" name="startDate" class="component-spacing" (change)="onDateChange()">
+
+
+        <label class="label-white component-spacing" for="endDate">Final Date:</label>
+        <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate" class="component-spacing" (change)="onDateChange()">
+      </form>
+
+      <table>
+        <tr>
+          <td class="chart-td">
+            <div class="chart-container">
+              <canvas id="barChart"></canvas>
+            </div>
+          </td>
+          <td class="chart-td">
+            <div class="chart-container">
+              <canvas id="pieChart"></canvas>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="chart-td">
+            <div class="chart-container">
+              <canvas id="costCompositionChart"></canvas>
+            </div>
+          </td>
+          <td class="chart-td">
+            <div class="chart-container">
+              <canvas id="lineChart"></canvas>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </ul>
+</body>
