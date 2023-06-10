@@ -33,6 +33,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ContratoTransportadoraFormDialogComponent,
     OrigemFormDialogComponent,
     DestinoFormDialogComponent,
-    DashboardComponent,
     CarrierFormDialogComponent,
     AtualizarComponent,
     Contrato_EADIComponent,
@@ -56,6 +56,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ContratoTerminalFormDialogComponent,
     DevolverVazioFormDialogComponent,
     ContainerReuseFormDialogComponent,
+    DashboardComponent,
 
 
   ],
