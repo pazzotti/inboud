@@ -1,1 +1,11 @@
-<p>dashboard works!</p>
+<form>
+  <label class="label-white component-spacing" for="startDate">Start Date:</label>
+  <input type="date" id="startDate" [(ngModel)]="startDate" class="component-spacing" (change)="onDateChange()">
+
+  <label class="label-white component-spacing" for="endDate">Final Date:</label>
+  <input type="date" id="endDate" [(ngModel)]="endDate" class="component-spacing" (change)="onDateChange()">
+</form>
+
+<div class="chart-container">
+  <canvas id="barChart"></canvas>
+</div>
