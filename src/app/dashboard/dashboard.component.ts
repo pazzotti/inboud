@@ -147,11 +147,6 @@ export class DashboardComponent implements OnInit {
     const options: Intl.DateTimeFormatOptions = { month: 'long' };
     return date.toLocaleDateString('pt-BR', options);
   }
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 68a84ee77784e53724e0efb1989db30a46ef1b2c
   createPieChart() {
     // Seu código para criar o gráfico de pizza
   }
