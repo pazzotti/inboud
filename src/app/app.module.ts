@@ -28,7 +28,7 @@ import { CarrierComponent } from './carriers/carriers.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devolver-vazio-form-dialog.component';
 import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/container-reuse-form-dialog.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+
 
 
 
@@ -41,7 +41,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ContratoTransportadoraFormDialogComponent,
     OrigemFormDialogComponent,
     DestinoFormDialogComponent,
-    DashboardComponent,
     CarrierFormDialogComponent,
     AtualizarComponent,
     Contrato_EADIComponent,
