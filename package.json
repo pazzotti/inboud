@@ -31,7 +31,6 @@
     "date-fns": "^2.30.0",
     "file-saver": "^2.0.5",
     "material-icons": "^1.13.6",
-    "ng2-charts": "^4.1.1",
     "ngx-bootstrap": "^10.2.0",
     "ngx-papaparse": "^7.0.0",
     "node-fetch": "^3.3.1",
