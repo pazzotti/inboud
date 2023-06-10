@@ -203,8 +203,6 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
-
   createPieChart() {
     const pieChart = new Chart('pieChart', {
       type: 'pie',
