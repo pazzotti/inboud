@@ -11,6 +11,7 @@ import { ContratoTerminalComponent } from './contrato-terminal/contrato-terminal
 import { Locais_DestinoComponent } from './locais-destino/locais-destino.component';
 import { Locais_OrigemComponent } from './locais-origem/locais-origem.component';
 import { CarrierComponent } from './carriers/carriers.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {path:'contratos',component:HomeComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path:'locais_destino',component:Locais_DestinoComponent},
   {path:'locais_origem',component:Locais_OrigemComponent},
   {path:'carrier',component:CarrierComponent},
+  {path:'dashboard',component:DashboardComponent},
 
 ];
 

@@ -29,6 +29,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devolver-vazio-form-dialog.component';
 import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/container-reuse-form-dialog.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { GoogleChartsModule } from 'angular-google-charts';
 
 
 
@@ -46,6 +47,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     AtualizarComponent,
     Contrato_EADIComponent,
     ContratoTerminalComponent,
+    DashboardComponent,
     Contrato_RedexComponent,
     ContratoTransportadoraComponent,
     Locais_OrigemComponent,
@@ -56,7 +58,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ContratoTerminalFormDialogComponent,
     DevolverVazioFormDialogComponent,
     ContainerReuseFormDialogComponent,
-    DashboardComponent,
+
 
 
   ],
@@ -65,6 +67,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserModule,
+    GoogleChartsModule.forRoot(),
     HeaderModule,
     HttpClientModule,
     FormsModule,
