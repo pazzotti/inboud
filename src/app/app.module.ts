@@ -29,6 +29,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DevolverVazioFormDialogComponent } from './app/home/devolver_vazio/devolver-vazio-form-dialog.component';
 import { ContainerReuseFormDialogComponent } from './app/home/container_reuse/container-reuse-form-dialog.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 
 
@@ -68,6 +69,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     HeaderModule,
     HttpClientModule,
     FormsModule,
+    HighchartsChartModule,
     MatDialogModule,
     BrowserAnimationsModule,
     BrowserAnimationsModule,

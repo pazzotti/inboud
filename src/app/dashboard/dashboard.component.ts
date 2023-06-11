@@ -1,33 +1,47 @@
-import { Component, AfterViewInit } from '@angular/core';
-import * as echarts from 'echarts';
+import { Component } from '@angular/core';
+import * as Highcharts from 'highcharts';
 
 @Component({
-  selector: 'app-meu-componente',
-  template: '<div id="meuGrafico" style="width: 600px; height: 400px;"></div>',
+  selector: 'app-chart',
+  template: `
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="chartOptions"
+      style="width: 100%; height: 400px;"
+    ></highcharts-chart>
+  `
 })
-export class DashboardComponent implements AfterViewInit {
-  ngAfterViewInit() {
-    const myChart = echarts.init(document.getElementById('meuGrafico')!);
-
-    // Configuração do gráfico
-    const options = {
+export class DashboardComponent {
+  Highcharts: typeof Highcharts = Highcharts;
+  chartOptions: Highcharts.Options = {
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: 'Sales Data'
+    },
+    xAxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
       title: {
-        text: 'Exemplo de Gráfico ECharts',
+        text: 'Month'
+      }
+    },
+    yAxis: {
+      title: {
+        text: 'Sales'
+      }
+    },
+    series: [
+      {
+        type: 'column', // Adicione esta propriedade
+        name: 'Product A',
+        data: [100, 200, 300, 400, 500, 600]
       },
-      xAxis: {
-        data: ['Categoria 1', 'Categoria 2', 'Categoria 3', 'Categoria 4', 'Categoria 5'],
-      },
-      yAxis: {},
-      series: [
-        {
-          name: 'Valores',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10],
-        },
-      ],
-    };
-
-    // Aplicar a configuração ao gráfico
-    myChart.setOption(options);
-  }
+      {
+        type: 'column', // Adicione esta propriedade
+        name: 'Product B',
+        data: [200, 300, 400, 500, 600, 700]
+      }
+    ]
+  };
 }
